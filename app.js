@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var Client = require('pg').Client;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -21,6 +22,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+//postgresql database setup
+var client = new Client({
+  user    :"postgres",
+  password:"password",
+  host    :"localhost",
+  port    :3300,
+  database:"librarytest"
+})
+
+client.connect()
+.then(() => console.log("db connected"))
+.then(() => client.query("select * from member"))
+.then(results => console.table(results.rows))
+.catch(e => console.log)
+.finally(() => client.end())
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
