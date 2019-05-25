@@ -16,7 +16,8 @@ CREATE TABLE book(
     pubyear INT,
     numpages INT NOT NULL,
     pubname TEXT,
-    PRIMARY KEY (isbn)
+    PRIMARY KEY (isbn),
+    UNIQUE (isbn, pubname)
 );
 --DROP TABLE author CASCADE ;
 CREATE TABLE author(
@@ -88,7 +89,7 @@ CREATE TABLE belongs_to(
     isbn INT NOT NULL,
     categoryname TEXT NOT NULL,
     PRIMARY KEY (isbn,categoryname),
-    UNIQUE FOREIGN KEY (isbn) REFERENCES book(isbn),
+    FOREIGN KEY (isbn) REFERENCES book(isbn),
     FOREIGN KEY (categoryname) REFERENCES category(categoryname)
 );
 --DROP TABLE reminder IF EXISTS CASCADE ;
@@ -111,7 +112,7 @@ CREATE TABLE written_by(
     isbn INT NOT NULL,
     authid INT NOT NULL,
     PRIMARY KEY (isbn,authid),
-    UNIQUE FOREIGN KEY (isbn) REFERENCES book(isbn),
+    FOREIGN KEY (isbn) REFERENCES book(isbn),
     FOREIGN KEY (authid) REFERENCES author(authid)
 );
 
