@@ -1,0 +1,19 @@
+{"shellLauncher.shells.windows": [
+    {
+        "shell": "C:\\WINDOWS\\System32\\cmd.exe",
+        "label": "cmd"
+    },
+    {
+        "shell": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "label": "PowerShell"
+    },
+    {
+        "shell": "C:\\Program Files\\Git\\bin\\bash.exe",
+        "label": "Git bash"
+    },
+    {
+        "shell": "C:\\Program Files\\PostgreSQL\\10\\scripts\\runpsql.bat",
+        "label": "psql Shell"
+    }
+]
+}
