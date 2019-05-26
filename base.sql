@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS member CASCADE ; 
 CREATE TABLE member(
     memberid INT NOT NULL UNIQUE ,
     mfirst TEXT NOT NULL,
@@ -8,6 +9,7 @@ CREATE TABLE member(
     mbirthdate DATE,
     PRIMARY KEY (memberid)
 );
+DROP TABLE IF EXISTS publisher CASCADE ;
 CREATE TABLE publisher(
     pubname TEXT NOT NULL UNIQUE,
     estyear INT,
@@ -16,6 +18,15 @@ CREATE TABLE publisher(
     postalcode INT,
     PRIMARY KEY (pubname)
 );
+DROP TABLE IF EXISTS author CASCADE ;
+CREATE TABLE author(
+    authid INT NOT NULL UNIQUE , 
+    afirst TEXT NOT NULL,
+    alast TEXT NOT NULL,
+    abirthdate DATE,
+    PRIMARY KEY (authid)
+);
+DROP TABLE IF EXISTS book CASCADE ;
 CREATE TABLE book(
     isbn INT NOT NULL UNIQUE ,
     title TEXT NOT NULL,  
@@ -25,21 +36,19 @@ CREATE TABLE book(
     PRIMARY KEY (isbn),
     UNIQUE (isbn, pubname),
     FOREIGN KEY (pubname) REFERENCES publisher(pubname)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
 );
-CREATE TABLE author(
-    authid INT NOT NULL UNIQUE , 
-    afirst TEXT NOT NULL,
-    alast TEXT NOT NULL,
-    abirthdate DATE,
-    PRIMARY KEY (authid)
-);
+DROP TABLE IF EXISTS category CASCADE ;
 CREATE TABLE category(
     categoryname TEXT NOT NULL ,
     supercategoryname TEXT NOT NULL ,
     PRIMARY KEY (categoryname),
     FOREIGN KEY (supercategoryname) REFERENCES category(categoryname)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
-
+DROP TABLE IF EXISTS copies CASCADE ;
 CREATE TABLE copies(
     isbn INT NOT NULL,
     copynr INT NOT NULL,
@@ -47,8 +56,10 @@ CREATE TABLE copies(
     UNIQUE (isbn, copynr),
     PRIMARY KEY (isbn,copynr),
     FOREIGN KEY (isbn) REFERENCES book(isbn)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
-
+DROP TABLE IF EXISTS employee CASCADE ;
 CREATE TABLE employee(
     empid INT NOT NULL UNIQUE,
     efirst TEXT NOT NULL,
@@ -56,18 +67,25 @@ CREATE TABLE employee(
     salary INT,
     PRIMARY KEY (empid)
 );
+DROP TABLE IF EXISTS permanent_employee ;
 CREATE TABLE permanent_employee(
     empid INT NOT NULL UNIQUE ,
     hiringdate DATE,
     PRIMARY KEY (empid),
     FOREIGN KEY (empid) REFERENCES employee(empid)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
+DROP TABLE IF EXISTS temporary_employee ;
 CREATE TABLE temporary_employee(
     empid INT NOT NULL UNIQUE ,
     contractnr INT,
     PRIMARY KEY (empid),
     FOREIGN KEY (empid) REFERENCES employee(empid)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
+DROP TABLE IF EXISTS borrows CASCADE ;
 CREATE TABLE borrows(
     memberid INT NOT NULL,
     isbn INT NOT NULL,
@@ -76,17 +94,29 @@ CREATE TABLE borrows(
     date_of_return DATE,
     UNIQUE (memberid, isbn, copynr,date_of_borrowing),
     PRIMARY KEY (memberid,isbn,copynr,date_of_borrowing),
-    FOREIGN KEY (memberid) REFERENCES member(memberid),
-    FOREIGN KEY (isbn) REFERENCES book(isbn),
+    FOREIGN KEY (memberid) REFERENCES member(memberid)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    FOREIGN KEY (isbn) REFERENCES book(isbn)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
     FOREIGN KEY (isbn,copynr) REFERENCES copies(isbn,copynr)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
+DROP TABLE IF EXISTS belongs_to ;
 CREATE TABLE belongs_to(
     isbn INT NOT NULL,
     categoryname TEXT NOT NULL,
     PRIMARY KEY (isbn,categoryname),
-    FOREIGN KEY (isbn) REFERENCES book(isbn),
+    FOREIGN KEY (isbn) REFERENCES book(isbn)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
     FOREIGN KEY (categoryname) REFERENCES category(categoryname)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL
 );
+DROP TABLE IF EXISTS reminder ;
 CREATE TABLE reminder(
     empid INT NOT NULL,
     memberid INT NOT NULL,
@@ -96,18 +126,28 @@ CREATE TABLE reminder(
     date_of_reminder DATE NOT NULL,
     UNIQUE (memberid, isbn, copynr, date_of_borrowing) ,
     PRIMARY KEY (empid,memberid,isbn,copynr,date_of_borrowing,date_of_reminder),
-    FOREIGN KEY (empid) REFERENCES employee(empid),
-    FOREIGN KEY (memberid) REFERENCES member(memberid),
-    FOREIGN KEY (isbn) REFERENCES book(isbn),
+    FOREIGN KEY (empid) REFERENCES employee(empid)
+    ON UPDATE CASCADE ON DELETE SET NULL,
+    FOREIGN KEY (memberid) REFERENCES member(memberid)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (isbn) REFERENCES book(isbn)
+    ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (memberid, isbn, copynr, date_of_borrowing) 
-    REFERENCES borrows(memberid, isbn, copynr, date_of_borrowing),
+    REFERENCES borrows(memberid, isbn, copynr, date_of_borrowing)
+    ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (isbn,copynr) REFERENCES copies(isbn, copynr)
+    ON UPDATE CASCADE ON DELETE CASCADE
 );
+DROP TABLE IF EXISTS written_by ;
 CREATE TABLE written_by(
     isbn INT NOT NULL,
     authid INT NOT NULL,
     PRIMARY KEY (isbn,authid),
-    FOREIGN KEY (isbn) REFERENCES book(isbn),
+    FOREIGN KEY (isbn) REFERENCES book(isbn)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
     FOREIGN KEY (authid) REFERENCES author(authid)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
 
