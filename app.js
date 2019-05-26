@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-
+//postgresql database setup
 var client = new Client({
   user    :"postgres",
   password:"784512963",
@@ -38,7 +38,7 @@ client.connect()
 .then(results => console.table(results.rows))
 .catch(e => console.log)
 .finally(() => client.end())
-//postgresql database setup
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
