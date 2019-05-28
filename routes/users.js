@@ -11,3 +11,4 @@ router.get('/details', function (req, res, next) {
 });
 
 module.exports = router;
+

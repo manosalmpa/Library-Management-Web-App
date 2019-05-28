@@ -20,16 +20,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+//app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",
+  password:"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library1"
+  database:"library"
 })
 
 client.connect()
@@ -37,7 +37,34 @@ client.connect()
 .then(() => client.query("select * from member"))
 .then(results => console.table(results.rows))
 .catch(e => console.log)
-.finally(() => client.end())
+//.finally(() => client.end())
+
+
+//routes
+
+
+//app.get('/',(req,res,next) => {
+ // console.log(req.method)
+ // console.log("inside get")
+ // const members=client.query("select * from member",(err,result,fields)=> {
+    //console.log(result)
+  //   res.json(result.rows)
+ // });
+  //console.log(members)
+  //res.send(members);
+  //next();
+//})
+
+
+app.get('/',(req,res,next) => {
+  res.send("<html><body><form action='/sadasd' method='post'>Username<input type='text' name='username' <br> Lastname<input type='text' name='lastname' <br><input type='submit' value='Submit'></form></body></html>")
+ 
+})
+
+app.post('/',(req,res,next) => {
+
+})
+
 
 
 // catch 404 and forward to error handler
