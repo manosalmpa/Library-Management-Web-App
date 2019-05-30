@@ -55,10 +55,11 @@ client.connect()
   //next();
 //})
 
-
+app.get('/',function(req,res) {
+  res.sendFile( 'index.html', { root: '.' });
+});
 app.get('/',(req,res,next) => {
-  res.send("<html><body><form action='/sadasd' method='post'>Username<input type='text' name='username' <br> Lastname<input type='text' name='lastname' <br><input type='submit' value='Submit'></form></body></html>")
- 
+  res.send("<html><body><form action='/sadasd' method='post'>Username<input type='text' name='username'<br> Lastname<input type='text' name='lastname' <br><input type='submit' value='Submit'></form></body></html>") 
 })
 
 app.post('/',(req,res,next) => {
