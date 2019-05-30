@@ -26,10 +26,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"784512963",
+  password:"password",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library"
+  database:"library1"//"library"
 })
 
 client.connect()
