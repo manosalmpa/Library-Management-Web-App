@@ -31,33 +31,28 @@ var client = new Client({
   database:"library"//"library"
 })
 
-
 client.connect()
 .then(() => console.log("db connected"))
 .catch(e => console.log(e))
 
-app.use(express.static('./public'))
-
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.post('/members', (req,res) => {
+app.post('/members', (req, res, next) => {
+  const text = 'INSERT INTO member(memberid, mfirst, mlast) VALUES($1, $2, $3)'
   const firstName = req.body.n1
   const lastName = req.body.n2
-  console.log(firstName+lastName)
-
-  const queryString = "INSERT INTO member (firstname, lastname) VALUES (?, ?)"
-  client.query(queryString, [firstName, lastName], (err, results, fields) =>{
-    if(err){
-      console.log("failed"+err)
-      res.sendStatus(500)
-      return
+  var memberID = req.body.n3
+  const values = [ memberID, firstName, lastName]
+  console.log(firstName + lastName + memberID) 
+  client.query(text, values, (err, res) => {
+    if (err) {
+      console.log(err.stack)
+    } else {
+      console.log('ok')
     }
-    console.log("ta katafera")
-    res.end()
   })
 })
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -68,8 +63,7 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
+// render the error page
   res.status(err.status || 500);
   res.render('error');
 });

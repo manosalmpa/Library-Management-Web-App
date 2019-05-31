@@ -1,0 +1,19 @@
+//code for showing member table on terminal 
+
+
+const text = 'SELECT * FROM member'
+client.query(text, (err, res) => {
+  if (err) {
+    console.log(err.stack)
+  } else {
+    console.log(res)
+    // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+  }
+})
+
+app.post('/members', (req,res) => {
+  
+  console.log(firstName+lastName)
+  client.query('INSERT INTO member(firstname, lastname) values($1, $2)',
+    [firstName.text, lastName.text]);
+});
