@@ -2,19 +2,18 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const morgan = require('morgan');
 var Client = require('pg').Client;
-
+var fs = require('fs');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+app.use(morgan('short'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -32,41 +31,32 @@ var client = new Client({
   database:"library"//"library"
 })
 
+
 client.connect()
 .then(() => console.log("db connected"))
-.then(() => client.query("select * from member"))
-.then(results => console.table(results.rows))
-.catch(e => console.log)
-//.finally(() => client.end())
+.catch(e => console.log(e))
 
+app.use(express.static('./public'))
 
-//routes
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended: false}))
 
+app.post('/members', (req,res) => {
+  const firstName = req.body.n1
+  const lastName = req.body.n2
+  console.log(firstName+lastName)
 
-//app.get('/',(req,res,next) => {
- // console.log(req.method)
- // console.log("inside get")
- // const members=client.query("select * from member",(err,result,fields)=> {
-    //console.log(result)
-  //   res.json(result.rows)
- // });
-  //console.log(members)
-  //res.send(members);
-  //next();
-//})
-
-app.get('/',function(req,res) {
-  res.sendFile( 'index.html', { root: '.' });
-});
-app.get('/',(req,res,next) => {
-  res.send("<html><body><form action='/sadasd' method='post'>Username<input type='text' name='username'<br> Lastname<input type='text' name='lastname' <br><input type='submit' value='Submit'></form></body></html>") 
+  const queryString = "INSERT INTO member (firstname, lastname) VALUES (?, ?)"
+  client.query(queryString, [firstName, lastName], (err, results, fields) =>{
+    if(err){
+      console.log("failed"+err)
+      res.sendStatus(500)
+      return
+    }
+    console.log("ta katafera")
+    res.end()
+  })
 })
-
-app.post('/',(req,res,next) => {
-
-})
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

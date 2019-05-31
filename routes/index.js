@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
   console.log("inside get")
   const members=client.query("select * from member");
   res.send(members);
+  console.log(members);
   //res.render('index', { title: 'LibraryNTUA' });
   
 });
