@@ -39,7 +39,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
 const memberInsert =(req, res, next) => {
-    var text = 'INSERT INTO member(memberid, mfirst, mlast) VALUES($1, $2, $3) RETURNING *'
+    var text = 'INSERT INTO member(memberid, mfirst, mlast) VALUES($1, $2, $3)'
     var firstName = req.body.n1
     var lastName = req.body.n2
     var memberID = req.body.n3
@@ -60,9 +60,42 @@ const memberInsert =(req, res, next) => {
     })
   }
 
-
+ const memberUpdate = (req, res) => {
+    var mfirst = req.body.n4
+    var mlast =  req.body.n5
+    var memberID = req.body.n6
+    const values = [mfirst, mlast, memberID]
+    client.query(
+     'UPDATE member SET mfirst = $1, mlast = $2 WHERE memberid = $3', 
+     values,  (error, results) => {
+        if (error) {
+          throw error
+        }
+        console.log('update sucess')
+      }
+    )
+    client.query('SELECT * FROM member ORDER BY memberid ASC',  (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
+    })
+  }
   
+  const memberSearch = (req, res) => {
+    var SearchTerm = req.body.n7
+    const values = [SearchTerm]
+    client.query('SELECT * FROM member WHERE memberid = ($1)', values , (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
+    })
+  }
+
+
   module.exports = {
     memberInsert,
-
+    memberUpdate,
+    memberSearch,
   }

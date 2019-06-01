@@ -38,23 +38,18 @@ client.connect()
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
+app.get('/home', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/home.html'));
+});
+app.get('/index', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/index.html'));
+});
 
-const getUsers = (request, response) => {
-  client.query('SELECT * FROM member ', (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
-app.get('/users', getUsers)
 
 var qrs = require("./queries");
-
-
-
 app.post('/members', qrs.memberInsert )
-
+app.post('/updateresults', qrs.memberUpdate )
+app.post('/searchresults',qrs.memberSearch)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
