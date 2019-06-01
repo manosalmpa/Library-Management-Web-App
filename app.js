@@ -49,11 +49,11 @@ const getUsers = (request, response) => {
 }
 app.get('/users', getUsers)
 
-var greetings = require ("./queries.js")
+var qrs = require("./queries");
 
 
 
-app.post('/members', memberInsert )
+app.post('/members', qrs.memberInsert )
 
 
 // catch 404 and forward to error handler
