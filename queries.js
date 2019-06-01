@@ -92,7 +92,28 @@ const memberInsert =(req, res, next) => {
       res.status(200).json(results.rows)
     })
   }
-
+  
+  const memberUpdate = (req, res) => {
+    var mfirst = req.body.n4
+    var mlast =  req.body.n5
+    var memberID = req.body.n6
+    const values = [mfirst, mlast, memberID]
+    client.query(
+     'UPDATE member SET mfirst = $1, mlast = $2 WHERE memberid = $3', 
+     values,  (error, results) => {
+        if (error) {
+          throw error
+        }
+        console.log('update sucess')
+      }
+    )
+    client.query('SELECT * FROM member ORDER BY memberid ASC',  (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
+    })
+  }
 
   module.exports = {
     memberInsert,
