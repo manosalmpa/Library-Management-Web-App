@@ -17,3 +17,32 @@ app.post('/members', (req,res) => {
   client.query('INSERT INTO member(firstname, lastname) values($1, $2)',
     [firstName.text, lastName.text]);
 });
+
+
+const text = 'SELECT * FROM items ORDER BY id ASC'
+client.query(text, (err, res) => {
+  if (err) {
+    console.log(err.stack)
+  } else {
+    console.log(res)
+    // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+  }
+})
+
+
+app.post('/members', (req, res, next) => {
+  const firstName = req.body.n1
+  const lastName = req.body.n2
+  const memberID = req.body.n3
+  console.log(lastName)
+  const results = [];
+  // Grab data from http request
+  const data = {text: req.body.n1, complete: false};
+  client.query('INSERT INTO items(text, complete) values($1, $2)',
+    [data.text, data.complete]);
+});
+
+
+const query = client.query( //sample query
+  'DROP TABLE IF EXISTS items; CREATE TABLE items(id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)');
+app.use(express.static('./public'))

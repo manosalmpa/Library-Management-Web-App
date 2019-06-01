@@ -38,21 +38,24 @@ client.connect()
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.post('/members', (req, res, next) => {
-  const text = 'INSERT INTO member(memberid, mfirst, mlast) VALUES($1, $2, $3)'
-  const firstName = req.body.n1
-  const lastName = req.body.n2
-  var memberID = req.body.n3
-  const values = [ memberID, firstName, lastName]
-  console.log(firstName + lastName + memberID) 
-  client.query(text, values, (err, res) => {
-    if (err) {
-      console.log(err.stack)
-    } else {
-      console.log('ok')
+
+const getUsers = (request, response) => {
+  client.query('SELECT * FROM member ', (error, results) => {
+    if (error) {
+      throw error
     }
+    response.status(200).json(results.rows)
   })
-})
+}
+app.get('/users', getUsers)
+
+var greetings = require ("./queries.js")
+
+
+
+app.post('/members', memberInsert )
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
