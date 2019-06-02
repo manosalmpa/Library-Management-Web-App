@@ -72,7 +72,7 @@ const memberInsert =(req, res, next) => {
         if (error) {
           throw error
         }
-        console.log('update sucess')
+        console.log('update success')
       }
     )
     client.query('SELECT * FROM member ORDER BY memberid ASC',  (error, results) => {

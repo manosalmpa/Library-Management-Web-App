@@ -49,9 +49,9 @@ app.get('/members', function (req, res) {
 });
 
 var qrs = require("./queries");
-app.post('/members', qrs.memberInsert )
-app.post('/updateresults', qrs.memberUpdate )
-app.post('/searchresults',qrs.memberSearch)
+app.post('/members/insert', qrs.memberInsert )
+app.post('/members/update', qrs.memberUpdate )
+app.post('/members/search', qrs.memberSearch)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
