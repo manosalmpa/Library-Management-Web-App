@@ -19,16 +19,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//AYTA PAIZEI NA EINAI AXRISTA
 //app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"784512963",//"",
+  password:"password",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library"//"library"
+  database:"library1"//"library"
 })
 
 client.connect()

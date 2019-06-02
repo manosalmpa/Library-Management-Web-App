@@ -25,10 +25,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"784512963",//"",
+  password:"password",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library"//"library"
+  database:"library1"//"library"
 })
 
 client.connect()
@@ -39,12 +39,14 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
 app.get('/home', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/home.html'));
+  res.sendFile(path.join(__dirname + '/views/homepage.html'));
 });
 app.get('/index', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/index.html'));
 });
-
+app.get('/members', function (req, res) {
+  res.sendFile(path.join(__dirname + '/public/members.html'));
+});
 
 var qrs = require("./queries");
 app.post('/members', qrs.memberInsert )
