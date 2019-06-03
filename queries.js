@@ -26,10 +26,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",//"784512963",
+  password:"784512963",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library2"//"library"
+  database:"library"//"library"
 })
 
 client.connect()
@@ -59,8 +59,15 @@ const memberInsert =(req, res, next) => {
       res.status(200).json(results.rows)
     })
   }
-
-  const Select = (cb) => { console.log('inside')
+///functions for exporting JSON from query to html
+  var reo;
+  fs.readFile(path.join(__dirname + '/tab.html'), 'utf8', function read(err, data) {
+    if (err) {
+        throw err;
+    } 
+    reo = data;
+  });
+  const Select = (cb) => { 
     client.query('SELECT * FROM member', (error, res,cols) => {
       if (error) {
         throw error
@@ -73,9 +80,44 @@ const memberInsert =(req, res, next) => {
       return cb(table);   
     })
   }
+  const expo = (req, res,next)=>{
+    Select(resql=>{
+      reo = reo.replace('{${table}}', resql);
+      res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+      res.write(reo, 'utf-8');
+      res.end();
+    })
+  }
 
-
-
+  ///same functions for books
+  var reo;
+  fs.readFile(path.join(__dirname + '/public/books.html'), 'utf8', function read(err, data) {
+    if (err) {
+        throw err;
+    } 
+    reo = data;
+  });
+  const Select2 = (cb) => { 
+    client.query('SELECT * FROM book', (error, res,cols) => {
+      if (error) {
+        throw error
+      }
+      var table ='';
+      for(var i=0; i<res.rowCount; i++){
+        table += '<tr><td>' + res.rows[i].isbn +'</td><td>'+ res.rows[i].numpages +'</td><td>'+ res.rows[i].title +'</td></tr>';
+      }
+      table ='<table border="1"><tr><th>isbn</th><th>numpagges</th><th>title</th></tr>'+ table +'</table>';
+      return cb(table);   
+    })
+  }
+  const expo2 = (req, res,next)=>{
+    Select2(resql=>{
+      reo = reo.replace('{${table}}', resql);
+      res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+      res.write(reo, 'utf-8');
+      res.end();
+    })
+  }
 
 
 
@@ -127,4 +169,8 @@ const memberInsert =(req, res, next) => {
     memberUpdate,
     memberSearch,
     Select,
+    expo,
+    expo2,
+    Select2
+
   }

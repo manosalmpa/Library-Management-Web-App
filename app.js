@@ -25,10 +25,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",//"784512963",
+  password:"784512963",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library2"//"library"
+  database:"library"//"library"
 })
 
 client.connect()
@@ -40,6 +40,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 
 
+
 app.get('/home', function(req, res) {
   res.sendFile(path.join(__dirname + '/views/homepage.html'));
 });
@@ -47,11 +48,12 @@ app.get('/index', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 app.get('/members', function (req, res) {
+
   res.sendFile(path.join(__dirname + '/public/members.html')); 
 });
-app.get('/books', function (req, res) {
-  res.sendFile(path.join(__dirname + '/public/books.html'));
-});
+//app.get('/books', function (req, res) {
+  //res.sendFile(path.join(__dirname + '/public/books.html'));
+//});
 app.get('/authors', function (req, res) {
   res.sendFile(path.join(__dirname + '/public/authors.html'));
 });
@@ -60,24 +62,13 @@ app.get('/page', function (req, res) {
 });
 
  
-var reo;
-fs.readFile(path.join(__dirname + '/tab.html'), 'utf8', function read(err, data) {
-    if (err) {
-        throw err;
-    } 
-    //console.log(data)
-    reo = data;
-});
+
+
+
 
 var qrs = require("./queries")
-app.post('/members/select', (req, res,next)=>{
-  qrs.Select(resql=>{
-    reo = reo.replace('{${table}}', resql);
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
-    res.write(reo, 'utf-8');
-    res.end();
-  });
-})
+app.get('/books', qrs.expo2)
+app.post('/members/select', qrs.expo)
 app.post('/members/insert', qrs.memberInsert)
 app.post('/members/update', qrs.memberUpdate)
 app.post('/members/search', qrs.memberSearch)
