@@ -26,10 +26,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",//"784512963",
+  password:"784512963",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library1"//"library"
+  database:"library"//"library"
 })
 
 client.connect()
@@ -53,14 +53,53 @@ const memberInsert =(req, res, next) => {
         console.log('insert success')
       }
     }) 
-    client.query('SELECT * FROM member ORDER BY memberid ASC', (error, results) => {
+    client.query('SELECT * FROM member ORDER BY memberid ASC', (error, results,cols) => {
       if (error) {
         throw error
       }
       res.status(200).json(results.rows)
     })
   }
+  var reo ='<html><head><title>Node.js MySQL Select</title></head><body><h1>Node.js MySQL Select</h1>{${table}}</body></html>';
 
+  ////////  
+  const Select = (cb) => { console.log('inside')
+    client.query('SELECT * FROM member', (error, res,cols) => {
+      if (error) {
+        throw error
+      }
+      var table ='';
+      console.log()
+      for(var i=0; i<res.rowCount; i++){
+        console.log(res)
+        table +='<tr><td>'+ (i+1) +'</td><td>'+ res.rows[i].memberid +'</td><td>'+ res.rows[i].mfirst +'</td></tr>';
+      }
+      table ='<table border="1"><tr><th>Nr.</th><th>Name</th><th>Address</th></tr>'+ table +'</table>';
+
+
+      return cb(table);
+
+
+
+      
+    })
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+//////////////////
  const memberUpdate = (req, res) => {
     var mfirst = req.body.n4
     var mlast =  req.body.n5
@@ -99,4 +138,5 @@ const memberInsert =(req, res, next) => {
     memberInsert,
     memberUpdate,
     memberSearch,
+    Select,
   }

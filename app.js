@@ -25,10 +25,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",//"784512963",
+  password:"784512963",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library1"//"library"
+  database:"library"//"library"
 })
 
 client.connect()
@@ -38,6 +38,8 @@ client.connect()
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
+
+
 app.get('/home', function(req, res) {
   res.sendFile(path.join(__dirname + '/views/homepage.html'));
 });
@@ -46,11 +48,35 @@ app.get('/index', function(req, res) {
 });
 app.get('/members', function (req, res) {
   res.sendFile(path.join(__dirname + '/public/members.html'));
+  
+});
+app.get('/page', function (req, res) {
+  res.sendFile(path.join(__dirname + '/page.html'));
+  
 });
 
-var qrs = require("./queries");
-app.post('/members/insert', qrs.memberInsert )
-app.post('/members/update', qrs.memberUpdate )
+//var reo ='<html><head><title>Node.js MySQL Select</title></head><body><h1>Node.js MySQL Select</h1>{${table}}<h2>HEADER 2</h2></body></html>';
+ 
+var reo;
+fs.readFile(path.join(__dirname + '/tab.html'), 'utf8', function read(err, data) {
+    if (err) {
+        throw err;
+    } console.log(data)
+    reo = data;
+});
+
+console.log(reo)
+var qrs = require("./queries")
+app.post('/members/select', (req, res,next)=>{
+  qrs.Select(resql=>{
+    reo = reo.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(reo, 'utf-8');
+    res.end();
+  });
+})
+app.post('/members/insert', qrs.memberInsert)
+app.post('/members/update', qrs.memberUpdate)
 app.post('/members/search', qrs.memberSearch)
 
 // catch 404 and forward to error handler
