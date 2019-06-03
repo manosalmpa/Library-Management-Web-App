@@ -9,6 +9,7 @@
             <button>Insert</button>
         </form>
         <form action="/members/update" method="POST">
+            <input type="number" required = "required" min="1" step="1"/>
             <input placeholder="firstname" name="n4" />
             <input placeholder="lastName" name="n5" />
             <input placeholder="memberid" name="n6" />
@@ -17,6 +18,10 @@
         <form action="/members/search" method="POST">
             <input placeholder="search" name="n7" />
             <button>Search</button>
+
+        </form>
+        <form action="/members/select" method="POST">
+            <button>Select</button>
         </form>
     </div>
 </body>
