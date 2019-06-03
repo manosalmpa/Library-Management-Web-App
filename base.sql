@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS member CASCADE ; 
 CREATE TABLE member(
-    memberid INT NOT NULL UNIQUE ,
+    memberid SERIAL ,
     mfirst TEXT NOT NULL,
     mlast TEXT NOT NULL,
     street TEXT,

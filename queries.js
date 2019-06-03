@@ -29,7 +29,7 @@ var client = new Client({
   password:"password",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library1"//"library"
+  database:"library2"//"library"
 })
 
 client.connect()
@@ -40,12 +40,11 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
 const memberInsert =(req, res, next) => {
-    var text = 'INSERT INTO member(memberid, mfirst, mlast) VALUES($1, $2, $3)'
+    var text = 'INSERT INTO member(mfirst, mlast) VALUES($1, $2)'
     var firstName = req.body.n1
     var lastName = req.body.n2
-    var memberID = req.body.n3
-    const values = [ memberID, firstName, lastName]
-    console.log('first name:' + firstName + '   last name:' +  lastName + '   member ID:' + memberID) 
+    const values = [firstName, lastName]
+    console.log('first name:' + firstName + '   last name:' +  lastName ) 
     client.query(text, values, (err, res) => {
       if (err) {
         console.log(err.stack)
@@ -93,7 +92,6 @@ const memberInsert =(req, res, next) => {
       res.status(200).json(results.rows)
     })
   }
-
 
   module.exports = {
     memberInsert,
