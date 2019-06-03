@@ -59,28 +59,18 @@ const memberInsert =(req, res, next) => {
       res.status(200).json(results.rows)
     })
   }
-  var reo ='<html><head><title>Node.js MySQL Select</title></head><body><h1>Node.js MySQL Select</h1>{${table}}</body></html>';
 
-  ////////  
   const Select = (cb) => { console.log('inside')
     client.query('SELECT * FROM member', (error, res,cols) => {
       if (error) {
         throw error
       }
-      console.log(res)
-
       var table ='';
       for(var i=0; i<res.rowCount; i++){
-        table +='<tr><td>'+ (i+1) +'</td><td>'+ res.rows[i].memberid +'</td><td>'+ res.rows[i].mfirst +'</td></tr>';
+        table += '<tr><td>' + res.rows[i].memberid +'</td><td>'+ res.rows[i].mfirst +'</td><td>'+ res.rows[i].mlast +'</td></tr>';
       }
-      table ='<table border="1"><tr><th>Nr.</th><th>Name</th><th>Address</th></tr>'+ table +'</table>';
-
-
-      return cb(table);
-
-
-
-      
+      table ='<table border="1"><tr><th>memberid</th><th>FirstName</th><th>LastName</th></tr>'+ table +'</table>';
+      return cb(table);   
     })
   }
 

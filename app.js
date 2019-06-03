@@ -47,21 +47,25 @@ app.get('/index', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 app.get('/members', function (req, res) {
-  res.sendFile(path.join(__dirname + '/public/members.html'));
-  
+  res.sendFile(path.join(__dirname + '/public/members.html')); 
+});
+app.get('/books', function (req, res) {
+  res.sendFile(path.join(__dirname + '/public/books.html'));
+});
+app.get('/authors', function (req, res) {
+  res.sendFile(path.join(__dirname + '/public/authors.html'));
 });
 app.get('/page', function (req, res) {
   res.sendFile(path.join(__dirname + '/page.html'));
-  
 });
 
-//var reo ='<html><head><title>Node.js MySQL Select</title></head><body><h1>Node.js MySQL Select</h1>{${table}}<h2>HEADER 2</h2></body></html>';
  
 var reo;
 fs.readFile(path.join(__dirname + '/tab.html'), 'utf8', function read(err, data) {
     if (err) {
         throw err;
-    } console.log(data)
+    } 
+    //console.log(data)
     reo = data;
 });
 
