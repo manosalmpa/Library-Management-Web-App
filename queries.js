@@ -27,10 +27,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"784512963",//"784512963",
+  password:"password",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library"//"library"
+  database:"library2"//"library"
 })
 
 client.connect()
@@ -133,6 +133,12 @@ const memberInsert =(req, res, next) => {
       } else {
         console.log('insert success')
       }
+    })
+    client.query('SELECT * FROM book ORDER BY isbn ASC', (error, results, cols) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
     })
 }
     

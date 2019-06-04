@@ -26,10 +26,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"784512963",//"784512963",
+  password:"password",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library"//"library"
+  database:"library2"//"library"
 })
 
 client.connect()
@@ -66,7 +66,7 @@ app.get('/page', function (req, res) {
 
 var qrs = require("./queries")
 app.get('/books', qrs.expo2)
-app.post('/books', qrs.bookinsert)
+app.post('/books/insert', qrs.bookinsert)
 app.post('/members/select', qrs.expo)
 app.post('/members/insert', qrs.memberInsert)
 app.post('/members/update', qrs.memberUpdate)
