@@ -20,17 +20,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//AYTA PAIZEI NA EINAI AXRISTA
-//app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",//"784512963",
+  password:"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library2"//"library"
+  database:"library"
 })
 
 client.connect()
@@ -187,6 +183,43 @@ const memberInsert =(req, res, next) => {
     })
   }
 
+
+// queries for author table START HERE
+// query for showing author entries in first page /authors
+var aut;
+fs.readFile(path.join(__dirname + '/public/authors.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  aut = data;
+});
+const SelectAuthor = (cb) => { 
+  client.query('SELECT * FROM author', (error, res,cols) => {
+    if (error) {
+      throw error
+    }
+    
+    var tablea ='';
+    for(var i=0; i<res.rowCount; i++){
+      
+      tablea += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td></tr>'+ res.rows[i].abirthdate +'</td><td>';
+    }
+    tablea ='<table border="1"><tr><th>Author ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th></tr>'+ tablea +'</table>';
+    return cb(tablea);   
+ 
+  })
+}
+const authorShow = (req, res,next)=>{
+  SelectAuthor(resql=>{
+    
+    aut = aut.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(aut, 'utf-8');
+    res.end();
+  })
+}
+
+
   module.exports = {
     memberInsert,
     memberUpdate,
@@ -195,6 +228,7 @@ const memberInsert =(req, res, next) => {
     expo,
     expo2,
     Select2,
-    bookinsert
+    bookinsert,
+    authorShow
 
   }
