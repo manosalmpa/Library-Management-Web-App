@@ -242,16 +242,18 @@ const authorInsert =(req, res, next) => {
   var afirst = req.body.a1
   var alast = req.body.a2
   var abirthdate = req.body.a3
-  const values = [afirst, alast, abirthdate]
+  var values = [afirst, alast, abirthdate]
   client.query(text, values, (err, res) => {
     if (err) {
       console.log(err.stack)
     } else {
-      console.log('insert success')
     }
   })
   console.log('insert success') 
 }
+// Query for showing new insert after successful insert
+
+
 
   module.exports = {
     memberInsert,
@@ -263,6 +265,6 @@ const authorInsert =(req, res, next) => {
     Select2,
     bookinsert,
     authorShow,
-    authorInsert
+    authorInsert,
 
   }

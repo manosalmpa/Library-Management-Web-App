@@ -3,20 +3,15 @@
 <body>
     <h1>available books </h1>
         {${table}}
+   
 </body>
 <head>
-        <h2>What do you want to do? </h2>
+        <h2>Insert a new book</h2>
 </head>
-<form action="/" method="GET">
-    <button> Go back </button>
-</form>
-<form action="/authors/insert" method="GET">
-    <button> Insert a new author </button>
-</form>
-<form action="/authors/update" method="GET">
-    <button> Update an existing author </button>
-</form>
-<form action="/authors/delete" method="GET">
-    <button> Delete an existing author </button>
+<form action="/books/insert" method="POST">
+    <input placeholder=" ISBN " name="n21" type="number" required = "required" min="1" step="1" maxlength=10 size="10" />
+    <input placeholder=" Title " name="n22" />
+    <input placeholder=" Number of pages" name="n23" />
+    <button>Insert new book </button>
 </form>
 </html>
