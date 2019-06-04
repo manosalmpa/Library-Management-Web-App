@@ -183,7 +183,6 @@ const memberInsert =(req, res, next) => {
     })
   }
 
-<<<<<<< HEAD
   //QUERIES//
 
   //arithmos vivliwn ana syggrafea (GROUP BY)
@@ -197,7 +196,6 @@ const q1 = (req, res) => {
 }
 
 //
-=======
 
 // queries for author table START HERE
 // query for showing author entries in first page /authors
@@ -234,7 +232,6 @@ const authorShow = (req, res,next)=>{
   })
 }
 
->>>>>>> cd076cdf6bad5f8375e5cdc05828f2546afae6f2
 
   module.exports = {
     memberInsert,
