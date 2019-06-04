@@ -60,11 +60,14 @@ app.get('/queries', function (req, res) {
 });
 
  
-
+app.get('/authors/insert', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/authors.insert.html'));
+});
 
 var qrs = require("./queries")
 app.get('/books', qrs.expo2)
 app.get('/authors', qrs.authorShow)
+app.post('/authors/insert', qrs.authorInsert)
 app.post('/books/insert', qrs.bookinsert)
 app.post('/members/select', qrs.expo)
 app.post('/members/insert', qrs.memberInsert)

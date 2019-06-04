@@ -20,6 +20,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+//app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
@@ -231,7 +236,22 @@ const authorShow = (req, res,next)=>{
     res.end();
   })
 }
-
+// Query for Inserting a new author into the db
+const authorInsert =(req, res, next) => {
+  var text = 'INSERT INTO author(afirst, alast, abirthdate) VALUES($1, $2, $3)'
+  var afirst = req.body.a1
+  var alast = req.body.a2
+  var abirthdate = req.body.a3
+  const values = [afirst, alast, abirthdate]
+  client.query(text, values, (err, res) => {
+    if (err) {
+      console.log(err.stack)
+    } else {
+      console.log('insert success')
+    }
+  })
+  console.log('insert success') 
+}
 
   module.exports = {
     memberInsert,
@@ -242,6 +262,7 @@ const authorShow = (req, res,next)=>{
     expo2,
     Select2,
     bookinsert,
-    authorShow
+    authorShow,
+    authorInsert
 
   }
