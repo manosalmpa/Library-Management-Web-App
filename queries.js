@@ -8,6 +8,7 @@ var fs = require('fs');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var app = express();
+const request = require('request');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -90,12 +91,12 @@ const memberInsert =(req, res, next) => {
   }
 
   ///same functions for books
-  var reo;
-  fs.readFile(path.join(__dirname + '/public/books.html'), 'utf8', function read(err, data) {
-    if (err) {
+  var reo2;
+      fs.readFile(path.join(__dirname + '/public/books.html'), 'utf8', function read(err, data) {
+      if (err) {
         throw err;
-    } 
-    reo = data;
+      } 
+      reo2 = data;
   });
   const Select2 = (cb) => { 
     client.query('SELECT * FROM book', (error, res,cols) => {
@@ -112,18 +113,34 @@ const memberInsert =(req, res, next) => {
   }
   const expo2 = (req, res,next)=>{
     Select2(resql=>{
-      reo = reo.replace('{${table}}', resql);
+      reo2 = reo2.replace('{${table}}', resql);
       res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
-      res.write(reo, 'utf-8');
+      res.write(reo2, 'utf-8');
       res.end();
     })
   }
 
+  const bookinsert =(req, res, next) => {
+    var text = 'INSERT INTO book(isbn, title, numpages) VALUES($1, $2, $3)'
+    var isbn = req.body.n21
+    var title = req.body.n22
+    var numpages = req.body.n23
+    const values = [isbn, title ,numpages]
+    console.log('inside')
+    client.query(text, values, (err, res) => {
+      if (err) {
+        console.log(err.stack)
+      } else {
+        console.log('insert success')
+      }
+    })
+}
+    
+  
 
 
 
-
-
+  
 
 
 
@@ -171,6 +188,7 @@ const memberInsert =(req, res, next) => {
     Select,
     expo,
     expo2,
-    Select2
+    Select2,
+    bookinsert
 
   }

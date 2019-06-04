@@ -8,6 +8,7 @@ var fs = require('fs');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var app = express();
+const request = require('request');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,9 +52,6 @@ app.get('/members', function (req, res) {
 
   res.sendFile(path.join(__dirname + '/public/members.html')); 
 });
-//app.get('/books', function (req, res) {
-  //res.sendFile(path.join(__dirname + '/public/books.html'));
-//});
 app.get('/authors', function (req, res) {
   res.sendFile(path.join(__dirname + '/public/authors.html'));
 });
@@ -68,6 +66,7 @@ app.get('/page', function (req, res) {
 
 var qrs = require("./queries")
 app.get('/books', qrs.expo2)
+app.post('/books', qrs.bookinsert)
 app.post('/members/select', qrs.expo)
 app.post('/members/insert', qrs.memberInsert)
 app.post('/members/update', qrs.memberUpdate)

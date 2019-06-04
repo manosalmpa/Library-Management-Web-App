@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Book entries</title>
-</head>
 <body>
-    <h1>Node.js MySQL Select</h1>
+    <h1>available books </h1>
         {${table}}
-    <h2>HEADER 2</h2>
+   
 </body>
 <head>
-        <title>Insert a new book</title>
+        <h2>Insert a new book</h2>
 </head>
 <form action="/books" method="POST">
-    <input placeholder=" ISBN " name="n21" type="number" required = "required" min="1" step="1" />
+    <input placeholder=" ISBN " name="n21" type="number" required = "required" min="1" step="1" maxlength=10 size="10" />
     <input placeholder=" Title " name="n22" />
-    <input placeholder=" Year of publishment" name="n22" />
+    <input placeholder=" Number of pages" name="n23" />
     <button>Insert new book </button>
 </form>
 </html>

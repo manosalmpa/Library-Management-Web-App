@@ -16,6 +16,7 @@
     "jquery.loadtemplate": "^1.5.10",
     "morgan": "~1.9.1",
     "pg": "^7.11.0",
+    "request": "^2.88.0",
     "supervisor": "^0.12.0"
   }
 }
