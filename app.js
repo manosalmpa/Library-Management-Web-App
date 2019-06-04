@@ -58,10 +58,11 @@ app.get('/authors', function (req, res) {
 app.get('/page', function (req, res) {
   res.sendFile(path.join(__dirname + '/page.html'));
 });
+app.get('/queries', function (req, res) {
+  res.sendFile(path.join(__dirname + '/public/queries.html'));
+});
 
  
-
-
 
 
 var qrs = require("./queries")

@@ -187,6 +187,20 @@ const memberInsert =(req, res, next) => {
     })
   }
 
+  //QUERIES//
+
+  //arithmos vivliwn ana syggrafea (GROUP BY)
+const q1 = (req, res) => {
+  client.query('SELECT * FROM written_by GROUP BY authid', (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results.rows)
+  })
+}
+
+//
+
   module.exports = {
     memberInsert,
     memberUpdate,

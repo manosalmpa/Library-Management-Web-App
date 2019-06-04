@@ -20,7 +20,7 @@ CREATE TABLE publisher(
 );
 DROP TABLE IF EXISTS author CASCADE ;
 CREATE TABLE author(
-    authid INT NOT NULL UNIQUE , 
+    authid SERIAL, 
     afirst TEXT NOT NULL,
     alast TEXT NOT NULL,
     abirthdate DATE,
