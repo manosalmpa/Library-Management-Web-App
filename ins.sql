@@ -5,11 +5,11 @@
     --    ('1743549801', 'Bad Therapist', '541');
 
 
-INSERT INTO author (authid, afirst, alast )
-VALUES  ('1', 'Victoria', 'Stone'),
-        ('2', 'Adam','Southward'),
-        ('3', 'Delia','Owens'),
-        ('4', 'James', 'Patterson');
+INSERT INTO author (afirst, alast )
+VALUES  ( 'Victoria', 'Stone'),
+        ( 'Adam','Southward'),
+        ('Delia','Owens'),
+        ( 'James', 'Patterson');
 
 
 
