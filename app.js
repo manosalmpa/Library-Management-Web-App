@@ -67,9 +67,9 @@ app.get('/book/update', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/book/bookupdate.html'));
 });
 app.get('/book', qrs.bookShow1)
-//app.post('/book/insert/success', qrs.bookInsert,qrs.bookShow2)
-//app.post('/book/delete/success', qrs.bookDelete,qrs.bookShow3)
-//app.post('/book/update/success', qrs.bookUpdate, qrs.bookShow4)
+app.post('/book/insert/success', qrs.bookInsert,qrs.bookShow2)
+app.post('/book/delete/success', qrs.bookDelete,qrs.bookShow3)
+app.post('/book/update/success', qrs.bookUpdate, qrs.bookShow4)
 
 
 

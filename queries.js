@@ -39,15 +39,16 @@ app.use(bodyParser.urlencoded({extended: false}))
 // queries for book table START HERE
 // query for showing book entries in first page /book
 const SelectBook1 = (cb) => { 
-  client.query('SELECT * FROM book ORDER BY ISBN ASC', (error, res,cols) => {
+  client.query('SELECT * FROM book ORDER BY isbn ASC', (error, res,cols) => {
     if (error) {
       throw error
     }
+    console.log('query')
     var tablebo1 ='';
     for(var i=0; i<res.rowCount; i++){
-      tablebo1 += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td><td>'+ res.rows[i].abirthdate +'</td></tr>';
+      tablebo1 += '<tr><td>' + res.rows[i].isbn +'</td><td>'+ res.rows[i].title +'</td><td>'+ res.rows[i].pubyear +'</td><td>'+ res.rows[i].numpages +'</td><td>' + res.rows[i].pubname +'</td></tr>';
     }
-    tablebo1 ='<table border="1"><tr><th>Author ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th></tr>'+ tablebo1 +'</table>';
+    tablebo1 ='<table border="1"><tr><th>ISBN </th><th> Title </th><th>Year of Publishment </th><th>Number of Pages</th><th>Publisher</th></tr>'+ tablebo1 +'</table>';
     return cb(tablebo1);   
   })
 }
@@ -65,15 +66,17 @@ fs.readFile(path.join(__dirname + '/public/book/book.html'), 'utf8', function re
     res.end();
   })
 });
- 
 }
 // Query for Inserting a new author into the db
 const bookInsert =(req, res, next) => {
-  var text = 'INSERT INTO book(afirst, alast, abirthdate) VALUES($1, $2, $3)'
-  var afirst = req.body.a1
-  var alast = req.body.a2
-  var abirthdate = req.body.a3
-  var values = [afirst, alast, abirthdate]
+  var text = 'INSERT INTO book(isbn, title, pubyear, numpages, pubname) VALUES($1, $2, $3, $4, $5)'
+  var isbn = req.body.b1
+  var title = req.body.b2
+  var pubyear = req.body.b3
+  var numpages  = req.body.b4
+  var pubname = req.body.b5
+  var values = [isbn, title, pubyear, numpages, pubname]
+  console.log(values)
   client.query(text, values, (err, res, next) => {
     if (err) {
       console.log(err.stack)
@@ -85,23 +88,22 @@ const bookInsert =(req, res, next) => {
 }
 // Query for showing new insert after successful insert follows with next()
 const SelectBook2 = (cb) => { 
-  client.query('SELECT * FROM book WHERE afirst = ($1) AND alast = ($2) ',
+  client.query('SELECT * FROM book WHERE isbn = ($1) ',
     values , (error, res,cols) => {
       if (error) {
         throw error
       }
     var tablebo2 ='';
     for(var i=0; i<res.rowCount; i++){
-      tablebo2 += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td><td>'+ res.rows[i].abirthdate +'</td></tr>';
+      tablebo2 += '<tr><td>' + res.rows[i].isbn +'</td><td>'+ res.rows[i].title +'</td><td>'+ res.rows[i].pubyear +'</td><td>'+ res.rows[i].numpages +'</td><td>' + res.rows[i].pubname +'</td></tr>';
     }
-    tablebo2 ='<table border="1"><tr><th>Author ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th></tr>'+ tablebo2 +'</table>';
+    tablebo2 ='<table border="1"><tr><th>ISBN </th><th> Title </th><th>Year of Publishment</th><th>Date of Birth</th><th>Number of Pages</th><th>Publisher</th></tr>'+ tablebo2 +'</table>';
     return cb(tablebo2);  
     })
 }
 const bookShow2 = (req, res,next)=>{
-  var afirst = req.body.a1
-  var alast = req.body.a2
-  values = [afirst, alast]
+  var isbn = req.body.b1
+  values = [isbn]
   var bo2
   fs.readFile(path.join(__dirname + '/public/book/bookinsertsuccess.html'), 'utf8', function read(err, data) {
   if (err) {
@@ -118,10 +120,9 @@ const bookShow2 = (req, res,next)=>{
 }
 // Query for deleting author
 const bookDelete = (req, res, next) => {
-  var text = 'DELETE FROM  book WHERE authid = ($1) '
-  var deleteID = req.body.a4
-  var values = [deleteID]
-  console.log(deleteID)
+  var text = 'DELETE FROM  book WHERE isbn = ($1)'
+  var deleteISBN= req.body.b6
+  var values = [deleteISBN]
   client.query(text, values, (err, res, next) => {
     if (err) {
       console.log(err.stack)
@@ -146,12 +147,13 @@ const bookShow3 = (req, res,next)=>{
 }
 // Query for updating author
 const bookUpdate =(req, res, next) => {
-  var text = 'UPDATE book SET afirst = ($1), alast = ($2) , abirthdate = ($3) WHERE authid = ($4)'
-  var authid = req.body.a5
-  var afirst = req.body.a6
-  var alast = req.body.a7
-  var abirthdate = req.body.a8
-  var values = [afirst, alast, abirthdate, authid]
+  var text = 'UPDATE book SET title = ($2) , pubyear = ($3), numpages = ($4), pubname = ($5) WHERE isbn = ($1)'
+  var isbn = req.body.b7
+  var title = req.body.b8
+  var pubyear = req.body.b9
+  var numpages  = req.body.b10
+  var pubname = req.body.b11
+  var values = [isbn, title, pubyear, numpages, pubname]
   client.query(text, values, (err, res, next) => {
     if (err) {
       console.log(err.stack)
@@ -162,7 +164,7 @@ const bookUpdate =(req, res, next) => {
   next()
 }
 const SelectBook4 = (cb) => { 
-  client.query('SELECT * FROM book WHERE authid = ($1) ',
+  client.query('SELECT * FROM book WHERE isbn = ($1) ',
     values , (error, res,cols) => {
       if (error) {
         throw error
@@ -177,7 +179,7 @@ const SelectBook4 = (cb) => {
 }
 const bookShow4 = (req, res,next)=>{
   var bo4
-  var bid = req.body.a5
+  var bid = req.body.b7
   values = [ bid ]
   fs.readFile(path.join(__dirname + '/public/book/bookupdatesuccess.html'), 'utf8', function read(err, data) {
   if (err) {
