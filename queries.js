@@ -204,35 +204,32 @@ const q1 = (req, res) => {
 
 // queries for author table START HERE
 // query for showing author entries in first page /authors
-var aut;
+var reo2;
 fs.readFile(path.join(__dirname + '/public/authors.html'), 'utf8', function read(err, data) {
   if (err) {
       throw err;
   } 
-  aut = data;
+  reo2 = data;
 });
-const SelectAuthor = (cb) => { 
+const SelectAuthor = (cb,aut) => { 
   client.query('SELECT * FROM author', (error, res,cols) => {
     if (error) {
       throw error
     }
-    
     var tablea ='';
     for(var i=0; i<res.rowCount; i++){
-      
-      tablea += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td></tr>'+ res.rows[i].abirthdate +'</td><td>';
+      tablea += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td><td>'+ res.rows[i].abirthdate +'</td></tr>';
     }
     tablea ='<table border="1"><tr><th>Author ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th></tr>'+ tablea +'</table>';
     return cb(tablea);   
- 
   })
 }
 const authorShow = (req, res,next)=>{
+
   SelectAuthor(resql=>{
-    
-    aut = aut.replace('{${table}}', resql);
+    reo2 = reo2.replace('{${table}}', resql);
     res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
-    res.write(aut, 'utf-8');
+    res.write(reo2, 'utf-8');
     res.end();
   })
 }
@@ -247,43 +244,46 @@ const authorInsert =(req, res, next) => {
     if (err) {
       console.log(err.stack)
     } else {
-      
     }
   })
   next()
-  console.log('insert success') 
-  var aut2 = ' <html><head></head><body>{${table}}</body></html> '
-  values = [afirst, alast]
-  console.log('before select author')
-  function SelectAuthor2(cb) { 
-  console.log('nexts')
-  pool.query('SELECT * FROM author WHERE afirst = ($1) AND alast = ($2) ',
-   values , (error, res,cols) => {
-    if (error) {
-      throw error
-    }
+}
+// Query for showing new insert after successful insert follows with next()
+const SelectAuthor2 = (cb) => { 
+  console.log('22222222222')
+  client.query('SELECT * FROM author WHERE afirst = ($1) AND alast = ($2) ',
+    values , (error, res,cols) => {
+      if (error) {
+        throw error
+      }
     var table2 ='';
     for(var i=0; i<res.rowCount; i++){
-      table2 += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td></tr>'+ res.rows[i].abirthdate +'</td><td>';
+      table2 += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td><td>'+ res.rows[i].abirthdate +'</td></tr>';
     }
     table2 ='<table border="1"><tr><th>Author ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th></tr>'+ table2 +'</table>';
     return cb(table2);  
     })
-  }
- console.log('after')
- next()
-const authorShow2 = (req, res,next)=>{
-
-  console.log('after values')
-    SelectAuthor2(resql=>{
-      aut2 = aut2.replace('{${table}}', resql);
-      res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
-      res.write(aut2, 'utf-8');
-      res.end();
-    })
-  }
 }
-// Query for showing new insert after successful insert
+const authorShow2 = (req, res,next)=>{
+  var aut2
+  fs.readFile(path.join(__dirname + '/public/authinsertsuccess.html'), 'utf8', function read(err, data) {
+    if (err) {
+        throw err;
+    } 
+    aut2 = data;
+  });
+  var afirst = req.body.a1
+  var alast = req.body.a2
+  values = [afirst, alast]
+  SelectAuthor2(resql=>{
+    aut2 = aut2.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(aut2, 'utf-8');
+    res.end();
+  })
+}
+// Query for deleting author
+
 
 
 
@@ -298,5 +298,6 @@ const authorShow2 = (req, res,next)=>{
     bookinsert,
     authorShow,
     authorInsert,
+    authorShow2,
 
   }
