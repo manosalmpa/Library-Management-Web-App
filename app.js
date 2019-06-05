@@ -67,7 +67,7 @@ app.get('/authors/insert', function(req, res) {
 var qrs = require("./queries")
 app.get('/books', qrs.expo2)
 app.get('/authors', qrs.authorShow)
-app.post('/authors/insert/success', qrs.authorInsert,qrs.authorShow )
+app.post('/authors/insert/success', qrs.authorInsert)
 app.post('/books/insert', qrs.bookinsert)
 app.post('/members/select', qrs.expo)
 app.post('/members/insert', qrs.memberInsert)

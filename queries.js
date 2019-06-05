@@ -9,7 +9,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var app = express();
 const request = require('request');
-
+const  Pool  = require('pg')
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -243,13 +243,45 @@ const authorInsert =(req, res, next) => {
   var alast = req.body.a2
   var abirthdate = req.body.a3
   var values = [afirst, alast, abirthdate]
-  client.query(text, values, (err, res) => {
+  client.query(text, values, (err, res, next) => {
     if (err) {
       console.log(err.stack)
     } else {
+      
     }
   })
+  next()
   console.log('insert success') 
+  var aut2 = ' <html><head></head><body>{${table}}</body></html> '
+  values = [afirst, alast]
+  console.log('before select author')
+  function SelectAuthor2(cb) { 
+  console.log('nexts')
+  pool.query('SELECT * FROM author WHERE afirst = ($1) AND alast = ($2) ',
+   values , (error, res,cols) => {
+    if (error) {
+      throw error
+    }
+    var table2 ='';
+    for(var i=0; i<res.rowCount; i++){
+      table2 += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td></tr>'+ res.rows[i].abirthdate +'</td><td>';
+    }
+    table2 ='<table border="1"><tr><th>Author ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th></tr>'+ table2 +'</table>';
+    return cb(table2);  
+    })
+  }
+ console.log('after')
+ next()
+const authorShow2 = (req, res,next)=>{
+
+  console.log('after values')
+    SelectAuthor2(resql=>{
+      aut2 = aut2.replace('{${table}}', resql);
+      res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+      res.write(aut2, 'utf-8');
+      res.end();
+    })
+  }
 }
 // Query for showing new insert after successful insert
 
