@@ -38,6 +38,7 @@ client.connect()
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
+
 app.get('/home', function(req, res) {
   res.sendFile(path.join(__dirname + '/views/homepage.html'));
 });
@@ -61,13 +62,15 @@ app.get('/authors/insert', function(req, res) {
 app.get('/authors/delete', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/authdelete.html'));
 });
-
+app.get('/authors/update', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/authupdate.html'));
+});
 
 var qrs = require("./queries")
 app.get('/books', qrs.expo2)
 app.get('/authors', qrs.authorShow)
 app.post('/authors/insert/success', qrs.authorInsert,qrs.authorShow2)
-app.post('/authors/delete/success', qrs.authorDelete, qrs.authorShow3 )
+app.post('/authors/delete/success', qrs.authorDelete,qrs.authorShow3 )
 app.post('/books/insert', qrs.bookinsert)
 app.get('/members/select', qrs.expo)
 app.post('/members/insert', qrs.memberInsert)

@@ -92,12 +92,12 @@ const memberInsert =(req, res, next) => {
   }
 
   ///same functions for books
-  var reo2;
+  var reo23;
       fs.readFile(path.join(__dirname + '/public/books.html'), 'utf8', function read(err, data) {
       if (err) {
         throw err;
       } 
-      reo2 = data;
+      reo23 = data;
   });
   const Select2 = (cb) => { 
     client.query('SELECT * FROM book', (error, res,cols) => {
@@ -114,9 +114,9 @@ const memberInsert =(req, res, next) => {
   }
   const expo2 = (req, res,next)=>{
     Select2(resql=>{
-      reo2 = reo2.replace('{${table}}', resql);
+      reo23 = reo23.replace('{${table}}', resql);
       res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
-      res.write(reo2, 'utf-8');
+      res.write(reo23, 'utf-8');
       res.end();
     })
   }
@@ -204,32 +204,33 @@ const q1 = (req, res) => {
 
 // queries for author table START HERE
 // query for showing author entries in first page /authors
-var reo2;
+
+var auths;
 fs.readFile(path.join(__dirname + '/public/authors.html'), 'utf8', function read(err, data) {
   if (err) {
       throw err;
   } 
-  reo2 = data;
+  auths = data;
 });
-const SelectAuthor = (cb,aut) => { 
-  client.query('SELECT * FROM author', (error, res,cols) => {
-    if (error) {
-      throw error
-    }
-    var tablea ='';
-    for(var i=0; i<res.rowCount; i++){
-      tablea += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td><td>'+ res.rows[i].abirthdate +'</td></tr>';
-    }
-    tablea ='<table border="1"><tr><th>Author ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th></tr>'+ tablea +'</table>';
-    return cb(tablea);   
-  })
-}
 const authorShow = (req, res,next)=>{
-
+  const SelectAuthor = (cb) => { 
+    client.query('SELECT * FROM author', (error, res,cols) => {
+      console.log('query running')
+      if (error) {
+        throw error
+      }
+      var tableauthor ='';
+      for(var i=0; i<res.rowCount; i++){
+        tableauthor += '<tr><td>' + res.rows[i].authid +'</td><td>'+ res.rows[i].afirst +'</td><td>'+ res.rows[i].alast +'</td><td>'+ res.rows[i].abirthdate +'</td></tr>';
+      }
+      tableauthor ='<table border="1"><tr><th>Author ID</th><th>First Name</th><th>Last Name</th><th>Date of Birth</th></tr>'+ tableauthor +'</table>';
+      return cb(tableauthor);   
+    })
+  }
   SelectAuthor(resql=>{
-    reo2 = reo2.replace('{${table}}', resql);
+    auths = auths.replace('{${table}}', resql);
     res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
-    res.write(reo2, 'utf-8');
+    res.write(auths, 'utf-8');
     res.end();
   })
 }
@@ -287,6 +288,7 @@ const authorShow2 = (req, res,next)=>{
 const authorDelete = (req, res, next) => {
   console.log('ayth')
   var text = 'DELETE FROM  author WHERE authid = ($1) '
+  
   var deleteID = req.body.a4
   var values = [deleteID]
   console.log(deleteID)

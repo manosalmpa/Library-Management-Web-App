@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Author Update</title>
+</head>
+<head>
+        <h1>Update an existing author entry based on his unique author ID</h1>
+</head>
+<form action="/authors/update/success" method="POST">
+    <input placeholder=" Author ID" type='number' name="a5" min="1" step="1" required="required"/>
+    <input placeholder=" First Name "  type='text'name="a6"   required = "required"  />
+    <input placeholder=" Last Name "  type='text' name="a7"  required = "required"  />
+    <input placeholder=" Date of birth" type='date' name="a8" required = "required" />
+    <button> Update </button>
+</form>
+<form action="/authors" method="GET">
+    <button> Go back </button>
+</form>
+</html>
