@@ -62,7 +62,9 @@ app.get('/authors/insert', function(req, res) {
 app.get('/authors/delete', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/authdelete.html'));
 });
-
+app.get('/authors/update', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/authupdate.html'));
+});
 
 var qrs = require("./queries")
 app.get('/books', qrs.expo2)
