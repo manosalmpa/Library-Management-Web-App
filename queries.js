@@ -249,6 +249,13 @@ const authorInsert =(req, res, next) => {
   next()
 }
 // Query for showing new insert after successful insert follows with next()
+var aut2
+fs.readFile(path.join(__dirname + '/public/authinsertsuccess.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  aut2 = data;
+});
 const SelectAuthor2 = (cb) => { 
   console.log('22222222222')
   client.query('SELECT * FROM author WHERE afirst = ($1) AND alast = ($2) ',
@@ -265,13 +272,7 @@ const SelectAuthor2 = (cb) => {
     })
 }
 const authorShow2 = (req, res,next)=>{
-  var aut2
-  fs.readFile(path.join(__dirname + '/public/authinsertsuccess.html'), 'utf8', function read(err, data) {
-    if (err) {
-        throw err;
-    } 
-    aut2 = data;
-  });
+
   var afirst = req.body.a1
   var alast = req.body.a2
   values = [afirst, alast]
@@ -283,7 +284,34 @@ const authorShow2 = (req, res,next)=>{
   })
 }
 // Query for deleting author
-
+const authorDelete = (req, res, next) => {
+  console.log('ayth')
+  var text = 'DELETE FROM  author WHERE authid = ($1) '
+  var deleteID = req.body.a4
+  var values = [deleteID]
+  console.log(deleteID)
+  client.query(text, values, (err, res, next) => {
+    if (err) {
+      console.log(err.stack)
+    } else {
+    }
+    console.log('delete suces')
+  })
+  next()
+}
+var aut3
+fs.readFile(path.join(__dirname + '/public/authdeletesuccess.html'),
+ 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  aut3 = data;
+});
+const authorShow3 = (req, res,next)=>{
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(aut3, 'utf-8');
+    res.end();
+}
 
 
 
@@ -299,5 +327,7 @@ const authorShow2 = (req, res,next)=>{
     authorShow,
     authorInsert,
     authorShow2,
+    authorDelete,
+    authorShow3,
 
   }
