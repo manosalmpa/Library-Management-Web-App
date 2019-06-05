@@ -1,1 +1,0 @@
-<form id="rendered-form"><div class="rendered-form"><div class="fb-text form-group field-text-1559600881265"><label for="text-1559600881265" class="fb-text-label">ISBN<span class="fb-required">*</span></label><input type="text" class="form-control" name="text-1559600881265" maxlength="10" id="text-1559600881265" required="required" aria-required="true"></div></div></form>

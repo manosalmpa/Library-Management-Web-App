@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Book insert </title>
+</head>       
+<head>
+    <h2>Insert a new book</h2>
+</head>
+<form action="/book/insert/success" method="POST">
+    <input placeholder=" ISBN" type='number' name="b1" min="1" step="1"  required = "required"  />
+    <input placeholder=" Title " type='text'name="b2" required = "required"  />
+    <input placeholder=" Publishment year " type='number' name="b3" min="1" step="1" required="required"  />
+    <input placeholder=" Number of pages" type='number' name="b4" min="1" step="1" required = "required"  />
+    <input placeholder=" Author" type='text' name="b5" required = "required"  />
+    <input placeholder=" Publisher" type='text' name="b6" required = "required"  />
+    <button>Insert new author </button>
+</form>
+<form action="/book" method="GET">
+    <button> Go back </button>
+</form>
+</html>

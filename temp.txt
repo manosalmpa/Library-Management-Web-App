@@ -1,0 +1,160 @@
+const memberInsert =(req, res, next) => {
+    var text = 'INSERT INTO member(mfirst, mlast) VALUES($1, $2)'
+    var firstName = req.body.n1
+    var lastName = req.body.n2
+    const values = [firstName, lastName]
+    console.log('first name:' + firstName + '   last name:' +  lastName ) 
+    client.query(text, values, (err, res) => {
+      if (err) {
+        console.log(err.stack)
+      } else {
+        console.log('insert success')
+      }
+    }) 
+    client.query('SELECT * FROM member ORDER BY memberid ASC', (error, results,cols) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
+    })
+  }
+///functions for exporting JSON from query to html
+  var reo;
+  fs.readFile(path.join(__dirname + '/tab.html'), 'utf8', function read(err, data) {
+    if (err) {
+        throw err;
+    } 
+    reo = data;
+  });
+  const Select = (cb) => { 
+    client.query('SELECT * FROM member', (error, res,cols) => {
+      if (error) {
+        throw error
+      }
+      var table ='';
+      for(var i=0; i<res.rowCount; i++){
+        table += '<tr><td>' + res.rows[i].memberid +'</td><td>'+ res.rows[i].mfirst +'</td><td>'+ res.rows[i].mlast +'</td></tr>';
+      }
+      table ='<table border="1"><tr><th>memberid</th><th>FirstName</th><th>LastName</th></tr>'+ table +'</table>';
+      return cb(table);   
+    })
+  }
+  const expo = (req, res,next)=>{
+    Select(resql=>{
+      reo = reo.replace('{${table}}', resql);
+      res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+      res.write(reo, 'utf-8');
+      res.end();
+    })
+  }
+
+  ///same functions for books
+  var reo23;
+      fs.readFile(path.join(__dirname + '/public/books.html'), 'utf8', function read(err, data) {
+      if (err) {
+        throw err;
+      } 
+      reo23 = data;
+  });
+  const Select2 = (cb) => { 
+    client.query('SELECT * FROM book', (error, res,cols) => {
+      if (error) {
+        throw error
+      }
+      var table ='';
+      for(var i=0; i<res.rowCount; i++){
+        table += '<tr><td>' + res.rows[i].isbn +'</td><td>'+ res.rows[i].numpages +'</td><td>'+ res.rows[i].title +'</td></tr>';
+      }
+      table ='<table border="1"><tr><th>isbn</th><th>numpagges</th><th>title</th></tr>'+ table +'</table>';
+      return cb(table);   
+    })
+  }
+  const expo2 = (req, res,next)=>{
+    Select2(resql=>{
+      reo23 = reo23.replace('{${table}}', resql);
+      res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+      res.write(reo23, 'utf-8');
+      res.end();
+    })
+  }
+
+  const bookinsert =(req, res, next) => {
+    var text = 'INSERT INTO book(isbn, title, numpages) VALUES($1, $2, $3)'
+    var isbn = req.body.n21
+    var title = req.body.n22
+    var numpages = req.body.n23
+    const values = [isbn, title ,numpages]
+    console.log('inside')
+    client.query(text, values, (err, res) => {
+      if (err) {
+        console.log(err.stack)
+      } else {
+        console.log('insert success')
+      }
+    })
+    client.query('SELECT * FROM book ORDER BY isbn ASC', (error, results, cols) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
+    })
+}
+    
+  
+
+
+
+  
+
+
+
+
+
+  
+//////////////////
+ const memberUpdate = (req, res) => {
+    var mfirst = req.body.n4
+    var mlast =  req.body.n5
+    var memberID = req.body.n6
+    const values = [mfirst, mlast, memberID]
+    client.query(
+     'UPDATE member SET mfirst = $1, mlast = $2 WHERE memberid = $3', 
+     values,  (error, results) => {
+        if (error) {
+          throw error
+        }
+        console.log('update success')
+      }
+    )
+    client.query('SELECT * FROM member ORDER BY memberid ASC',  (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
+    })
+  }
+  
+  const memberSearch = (req, res) => {
+    var SearchTerm = req.body.n7
+    const values = [SearchTerm]
+    client.query('SELECT * FROM member WHERE memberid = ($1)', values , (error, results) => {
+      if (error) {
+        throw error
+      }
+      res.status(200).json(results.rows)
+    })
+  }
+
+  //QUERIES//
+
+  //arithmos vivliwn ana syggrafea (GROUP BY)
+const q1 = (req, res) => {
+  client.query('SELECT * FROM written_by GROUP BY authid', (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results.rows)
+  })
+}
+
+//
