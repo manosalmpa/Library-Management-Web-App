@@ -39,43 +39,43 @@ client.connect()
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
-app.get('/home', function(req, res) {
-  res.sendFile(path.join(__dirname + '/views/homepage.html'));
-});
-app.get('/index', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/index.html'));
-});
-app.get('/members', function (req, res) {
-   res.sendFile(path.join(__dirname + '/public/members.html')); 
-});
-app.get('/page', function (req, res) {
-  res.sendFile(path.join(__dirname + '/page.html'));
-});
-app.get('/queries', function (req, res) {
-  res.sendFile(path.join(__dirname + '/public/queries.html'));
-});
+var qrs = require("./queries")  //functions import from queries.js
 
- 
+ //authors routing
 app.get('/authors/insert', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/authinsert.html'));
+  res.sendFile(path.join(__dirname + '/public/auth/authinsert.html'));
 });
 app.get('/authors/delete', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/authdelete.html'));
+  res.sendFile(path.join(__dirname + '/public/auth/authdelete.html'));
 });
 app.get('/authors/update', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/authupdate.html'));
+  res.sendFile(path.join(__dirname + '/public/auth/authupdate.html'));
 });
-
-var qrs = require("./queries")
-app.get('/books', qrs.expo2)
-app.get('/authors', qrs.authorShow)
+app.get('/authors', qrs.authorShow1)
 app.post('/authors/insert/success', qrs.authorInsert,qrs.authorShow2)
 app.post('/authors/delete/success', qrs.authorDelete,qrs.authorShow3 )
-app.post('/books/insert', qrs.bookinsert)
-app.get('/members/select', qrs.expo)
-app.post('/members/insert', qrs.memberInsert)
-app.post('/members/update', qrs.memberUpdate)
-app.post('/members/search', qrs.memberSearch)
+app.post('/authors/update/success', qrs.authorUpdate, qrs.authorShow4)
+
+ //book routing
+ app.get('/book/insert', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/book/bookinsert.html'));
+});
+app.get('/book/delete', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/book/bookdelete.html'));
+});
+app.get('/book/update', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/book/bookupdate.html'));
+});
+app.get('/book', qrs.bookShow1)
+app.post('/book/insert/success', qrs.bookInsert,qrs.bookShow2)
+app.post('/book/delete/success', qrs.bookDelete,qrs.bookShow3)
+app.post('/book/update/success', qrs.bookUpdate, qrs.bookShow4)
+
+
+
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
