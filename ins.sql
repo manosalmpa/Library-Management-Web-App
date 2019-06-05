@@ -38,7 +38,25 @@ VALUES
     ('Delia','Owens'),
     ('James', 'Patterson');
 
+INSERT INTO category
+VALUES
+    ('fiction','NULL'),
+    ('sci-fi','fiction'),
+    ('culture','NULL'),
+    ('romance','culture'),
+    ('history','culture');
 
+INSERT INTO copies
+    (isbn, copynr)
+VALUES
+    ('1948576910','1'),
+    ('1948576910','2'),
+    ('1948576910','3'),
+    ('1574930452', '1'),
+    ('1574930452', '2'),
+    ('1574930452', '3'),
+    ('1595003214', '1'),
+    ('1743549801','1');
 
 
 --C:/Users/Vagelis/Documents/dbs/app1/ins.sql link for inserting

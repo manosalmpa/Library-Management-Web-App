@@ -42,7 +42,7 @@ CREATE TABLE book(
 DROP TABLE IF EXISTS category CASCADE ;
 CREATE TABLE category(
     categoryname TEXT NOT NULL ,
-    supercategoryname TEXT NOT NULL ,
+    supercategoryname TEXT ,
     PRIMARY KEY (categoryname),
     FOREIGN KEY (supercategoryname) REFERENCES category(categoryname)
     ON UPDATE CASCADE
