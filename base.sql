@@ -1,3 +1,4 @@
+--path C:/Users/Vagelis/Documents/dbs/app1/base.sql
 DROP TABLE IF EXISTS member CASCADE ; 
 CREATE TABLE member(
     memberid SERIAL ,

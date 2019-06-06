@@ -23,10 +23,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",
+  password:"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library2"
+  database:"library"
 })
 
 client.connect()
@@ -517,7 +517,7 @@ const memberShow4 = (req, res,next)=>{
   })
   });
 }
-// queries for book table END HERE
+// queries for member table END HERE
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
