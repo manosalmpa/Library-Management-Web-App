@@ -109,10 +109,75 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher.html'), 'utf8', fun
   })
 });
 }
+//showing book per publisher when books/publisher > 2
+const bookPublisher2 =(cb) => {
+  var text = ' SELECT publisher.pubname, COUNT(book.isbn) AS C '
+  text = text + ' FROM publisher FULL JOIN book '
+  text = text + ' ON publisher.pubname = book.pubname '
+  text = text + ' WHERE publisher.pubname IS NOT NULL '
+  text = text + ' HAVING C>2 GROUP BY publisher.pubname '
+  console.log(text)
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablebp2 ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablebp2 += '<tr><td>' + res.rows[i].pubname +'</td><td>' + res.rows[i].count +'</td></tr>';
+  }
+  tablebp2 ='<table border="1"><tr><th> Publisher </th><th> Number of books </th></tr>'+ tablebp2 +'</table>';
+  return cb(tablebp2);   
+})
+}
+const bookPublisherShow2 = (req, res,next)=>{
+  var bp2;
+fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher2.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  bp2 = data;
+  bookPublisher2(resql=>{
+    bp2 = bp2.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(bp2, 'utf-8');
+    res.end();
+  })
+});
+}
 
-
-
-
+// Show members order by Last name
+const memberSort =(cb) => {
+  var text = ' SELECT member.mfirst,member.mlast,member.memberid '
+  text = text + ' FROM member ORDER BY member.mlast '
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablems ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablems += '<tr><td>' + res.rows[i].mfirst +'</td><td>' + res.rows[i].mlast +'</td><td>' + res.rows[i].memberid +'</td></tr>';
+  }
+  tablems ='<table border="1"><tr><th> First Name </th><th> Last Name </th><th> Member ID </th></tr>'+ tablems +'</table>';
+  return cb(tablems);   
+})
+}
+const memberSortShow = (req, res,next)=>{
+  var ms;
+fs.readFile(path.join(__dirname + '/public/qrs/membersort.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  ms = data;
+  memberSort(resql=>{
+    ms = ms.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(ms, 'utf-8');
+    res.end();
+  })
+});
+}
 
 
 
@@ -606,7 +671,9 @@ const memberShow4 = (req, res,next)=>{
 
   module.exports = {
     bookAuthorShow,
-    bookPublisherShow, 
+    bookPublisherShow,
+    bookPublisherShow2, 
+    memberSortShow, 
 
     bookShow1,
     bookInsert,

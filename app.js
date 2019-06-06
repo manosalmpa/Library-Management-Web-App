@@ -43,6 +43,9 @@ var qrs = require("./queries")  //functions import from queries.js
 //7 queries routing
 app.get('/bookauthor', qrs.bookAuthorShow)
 app.get('/bookpublisher', qrs.bookPublisherShow)
+app.get('/bookpublisher2', qrs.bookPublisherShow2)
+app.get('/membersort', qrs.memberSortShow)
+
 
  //authors routing
 app.get('/authors/insert', function(req, res) {

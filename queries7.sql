@@ -25,14 +25,14 @@ FULL JOIN book ON publisher.pubname = book.pubname
 WHERE publisher.pubname IS NOT NULL
 GROUP BY publisher.pubname;
 
---BOOKS PER PUBLISHED >0 (GROUP BY ME HAVING)
+--BOOKS PER PUBLISHED >2 (GROUP BY ME HAVING)
 SELECT publisher.pubname,
        COUNT(book.isbn) AS C
 FROM publisher
 FULL JOIN book ON publisher.pubname = book.pubname
 WHERE publisher.pubname IS NOT NULL
 GROUP BY publisher.pubname
-HAVING c>5;
+HAVING c>2;
 
 --ORDER BY mlast(ORDER BY)
 SELECT member.mfirst,member.mlast,member.memberid
