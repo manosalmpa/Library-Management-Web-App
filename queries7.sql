@@ -52,3 +52,4 @@ SELECT
 FROM book
 FULL JOIN belongs_to ON book.isbn = belongs_to.isbn
 ORDER BY book.isbn;
+-- 7 
