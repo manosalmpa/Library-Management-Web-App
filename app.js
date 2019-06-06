@@ -29,7 +29,7 @@ var client = new Client({
   password:"784512963",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library5"//"library"
+  database:"library"//"library"
 })
 
 client.connect()
@@ -40,6 +40,8 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
 var qrs = require("./queries")  //functions import from queries.js
+//7 queries routing
+app.get('/bookauthor', qrs.bookAuthorShow)
 
  //authors routing
 app.get('/authors/insert', function(req, res) {
