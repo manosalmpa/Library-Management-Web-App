@@ -36,7 +36,7 @@ client.connect()
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
-
+//showing book-author query
 const bookAuthor =(cb) => {
   var text = 'SELECT book.title, sub.afirst, sub.alast, sub.isbn FROM ';
   text = text + '(SELECT author.authid, author.afirst, author.alast, written_by.isbn '
@@ -73,7 +73,42 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookauthor.html'), 'utf8', functi
   })
 });
 }
-
+//showing book per publisher
+const bookPublisher =(cb) => {
+  var text = ' SELECT publisher.pubname, COUNT(book.isbn) '
+  text = text + ' FROM publisher FULL JOIN book '
+  text = text + ' ON publisher.pubname = book.pubname WHERE '
+  text = text + ' publisher.pubname IS NOT NULL '
+  text = text + ' GROUP BY publisher.pubname '
+  console.log(text)
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablebp ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablebp += '<tr><td>' + res.rows[i].pubname +'</td><td>' + res.rows[i].count +'</td></tr>';
+  }
+  tablebp ='<table border="1"><tr><th> Publisher </th><th> Number of books </th></tr>'+ tablebp +'</table>';
+  return cb(tablebp);   
+})
+}
+const bookPublisherShow = (req, res,next)=>{
+  var bp;
+fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  bp = data;
+  bookPublisher(resql=>{
+    bp = bp.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(bp, 'utf-8');
+    res.end();
+  })
+});
+}
 
 
 
@@ -570,7 +605,8 @@ const memberShow4 = (req, res,next)=>{
 
 
   module.exports = {
-    bookAuthorShow, 
+    bookAuthorShow,
+    bookPublisherShow, 
 
     bookShow1,
     bookInsert,

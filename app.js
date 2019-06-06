@@ -42,6 +42,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 var qrs = require("./queries")  //functions import from queries.js
 //7 queries routing
 app.get('/bookauthor', qrs.bookAuthorShow)
+app.get('/bookpublisher', qrs.bookPublisherShow)
 
  //authors routing
 app.get('/authors/insert', function(req, res) {
