@@ -47,6 +47,7 @@ app.get('/bookpublisher2', qrs.bookPublisherShow2)
 app.get('/membersort', qrs.memberSortShow)
 app.get('/memberpostal', qrs.memberPostalShow)
 app.get('/bookcat', qrs.bookCatShow)
+app.get('/bookcopy', qrs.bookCopyShow)
 
  //authors routing
 app.get('/authors/insert', function(req, res) {

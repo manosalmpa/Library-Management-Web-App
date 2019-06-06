@@ -36,7 +36,7 @@ client.connect()
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
-//showing book-author query
+// 1 showing book-author query
 const bookAuthor =(cb) => {
   var text = 'SELECT book.title, sub.afirst, sub.alast, sub.isbn FROM ';
   text = text + '(SELECT author.authid, author.afirst, author.alast, written_by.isbn '
@@ -73,7 +73,7 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookauthor.html'), 'utf8', functi
   })
 });
 }
-//showing book per publisher
+// 2 showing book per publisher
 const bookPublisher =(cb) => {
   var text = ' SELECT publisher.pubname, COUNT(book.isbn) '
   text = text + ' FROM publisher FULL JOIN book '
@@ -109,7 +109,7 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher.html'), 'utf8', fun
   })
 });
 }
-//showing book per publisher when books/publisher > 2
+//3 showing book per publisher when books/publisher > 2
 const bookPublisher2 =(cb) => {
   var text = ' SELECT publisher.pubname, COUNT(book.isbn) '
   text = text + ' FROM publisher FULL JOIN book '
@@ -145,7 +145,7 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher2.html'), 'utf8', fu
   })
 });
 }
-// Show members order by Last name
+// 4 Show members order by Last name
 const memberSort =(cb) => {
   var text = ' SELECT member.mfirst,member.mlast,member.memberid '
   text = text + ' FROM member ORDER BY member.mlast '
@@ -177,7 +177,7 @@ fs.readFile(path.join(__dirname + '/public/qrs/membersort.html'), 'utf8', functi
   })
 });
 }
-// show members with mobile phone (aggregate)
+// 5 show members with mobile phone (aggregate)
 const memberPostal =(cb) => {
   var text = ' SELECT member.memberid, member.mfirst, '
   text = text + '  member.mlast, member.postalcode '
@@ -211,7 +211,7 @@ fs.readFile(path.join(__dirname + '/public/qrs/memberpostal.html'), 'utf8', func
   })
 });
 }
-// all books with their categories
+// 6 all books with their categories
 const bookCat =(cb) => {
   var text = ' SELECT book.isbn, book.title, '
   text = text + '  book.numpages, belongs_to.categoryname '
@@ -246,8 +246,40 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookcat.html'), 'utf8', function 
   })
 });
 }
-
-
+// 7 show copies per book
+const bookCopy =(cb) => {
+  var text = '  SELECT copies.isbn, COUNT(copies.copynr) '
+  text = text + '   FROM copies GROUP BY copies.isbn '
+  console.log(text)
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablebc ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablebc += '<tr><td>' + res.rows[i].isbn +'</td><td>' + res.rows[i].copynr +'</td></tr>';
+  }
+  tablebc ='<table border="1"><tr><th> ISBN  </th><th> Number of copies </th></tr>'+ tablebc +'</table>';
+  return cb(tablebc);   
+})
+}
+const bookCopyShow = (req, res,next)=>{
+  var bc;
+  console.log('inside')
+fs.readFile(path.join(__dirname + '/public/qrs/bookcopy.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  bc = data;
+  bookCopy(resql=>{
+    bc = bc.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(bc, 'utf-8');
+    res.end();
+  })
+});
+}
 
 ////////////////////////////////////////////////////////////////
 // queries for book table START HERE
@@ -742,6 +774,7 @@ const memberShow4 = (req, res,next)=>{
     memberSortShow,
     memberPostalShow, 
     bookCatShow,
+    bookCopyShow,
 
     bookShow1,
     bookInsert,

@@ -25,7 +25,7 @@ FULL JOIN book ON publisher.pubname = book.pubname
 WHERE publisher.pubname IS NOT NULL
 GROUP BY publisher.pubname;
 
--- 3 BOOKS PER PUBLISHED >2 (GROUP BY, AGGREGATE)
+-- 3 BOOKS PER PUBLISHED >2 (GROUP BY, HAVING, AGGREGATE, ORDER BY)
 SELECT publisher.pubname,
        COUNT(book.isbn) 
 FROM publisher
@@ -53,3 +53,8 @@ SELECT
 FROM book
 FULL JOIN belongs_to ON book.isbn = belongs_to.isbn
 ORDER BY book.isbn;
+-- 7 SHOW COPIES PER BOOK (GROUP BY)
+SELECT copies.isbn,
+    COUNT(copies.copynr)
+FROM copies
+GROUP BY copies.isbn;
