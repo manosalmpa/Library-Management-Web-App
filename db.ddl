@@ -1,4 +1,3 @@
---path C:/Users/Vagelis/Documents/dbs/app1/base.sql
 DROP TABLE IF EXISTS member CASCADE ; 
 CREATE TABLE member(
     memberid SERIAL ,
@@ -151,7 +150,7 @@ CREATE TABLE written_by(
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
-
+--triggers
 --auto create reminder from borrowing
 CREATE OR REPLACE FUNCTION create_reminder() 
 RETURNS TRIGGER
@@ -188,9 +187,7 @@ DROP TRIGGER IF EXISTS super ON belongs_to;
 
 CREATE TRIGGER super
 AFTER INSERT ON belongs_to FOR EACH ROW EXECUTE PROCEDURE supercat();
-
-
---path C:/Users/Vagelis/Documents/dbs/app1/ins.sql
+-- insert
 INSERT INTO member
     (mfirst, mlast,postalcode)
 VALUES
@@ -305,3 +302,20 @@ VALUES
     ('4', '1574930452', '1', '6/6/2019', '7/6/2019'),
     ('2', '1743549801', '1', '6/6/2019', '7/6/2019'),
     ('3', '1134589703', '1', '6/6/2019', '7/6/2019');
+
+--views2
+--fiction
+CREATE VIEW fiction AS 
+    SELECT book.isbn,
+        book.title,
+        book.numpages,
+        belongs_to.categoryname
+    FROM book
+    FULL JOIN belongs_to ON book.isbn = belongs_to.isbn
+    WHERE belongs_to.categoryname = 'fiction'
+    ORDER BY book.isbn;
+
+--automatically updateable view
+CREATE VIEW memberview AS
+    SELECT *
+    FROM member;
