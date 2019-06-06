@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Member insert </title>
+</head>       
+<head>
+    <h2>Insert a new member</h2>
+</head>
+<form action="/member/insert/success" method="POST">
+    <input placeholder=" First name " type='text'name="m1" required = "required"  />
+    <input placeholder=" Last name " type='text' name="m2" required="required"  />
+    <input placeholder=" Street name " type='text' name="m3" required="required"  />
+    <input placeholder=" Street number" type='number' name="m4" min="1" step="1" required = "required"  />
+    <input placeholder=" Postal code" type='number' name="m5" min="1" step="1" required = "required"  />
+    <input placeholder=" Date of birth " type='date' name="m6" required = "required"  />
+    <button>Insert new member </button>
+</form>
+<form action="/member" method="GET">
+    <button> Go back </button>
+</form>
+</html>

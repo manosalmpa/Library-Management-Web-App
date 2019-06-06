@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Member update </title>
+</head>
+<head>
+        <h1> Update an existing member entry based on its member ID </h1>
+</head>
+<form action="/member/update/success" method="POST">
+    <input placeholder=" member ID " type='number' name="m8" min="1" step="1" required = "required"  />
+    <input placeholder=" First name " type='text'name="m9" required = "required"  />
+    <input placeholder=" Last name " type='text' name="m10" required="required"  />
+    <input placeholder=" Street name " type='text' name="m11" required="required"  />
+    <input placeholder=" Street number" type='number' name="m12" min="1" step="1" required = "required"  />
+    <input placeholder=" Postal code" type='number' name="m13" min="1" step="1" required = "required"  />
+    <input placeholder=" Date of birth " type='date' name="m14" required = "required"  />
+    <button> Update </button>
+</form>
+<form action="/member" method="GET">
+    <button> Go back </button>
+</form>
+</html>

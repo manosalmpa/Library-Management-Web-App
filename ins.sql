@@ -1,3 +1,4 @@
+--path C:/Users/Vagelis/Documents/dbs/app1/ins.sql
 INSERT INTO member
     (mfirst, mlast)
 VALUES

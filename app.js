@@ -26,10 +26,14 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",//"784512963",
+  password:"784512963",//"784512963",
   host    :"localhost",
   port    :3300,
+<<<<<<< HEAD
   database:"library5"//"library"
+=======
+  database:"library"//"library"
+>>>>>>> 177f3cdcdad1a8cd05ba554ba303e459057d41fd
 })
 
 client.connect()
@@ -70,6 +74,24 @@ app.get('/book', qrs.bookShow1)
 app.post('/book/insert/success', qrs.bookInsert,qrs.bookShow2)
 app.post('/book/delete/success', qrs.bookDelete,qrs.bookShow3)
 app.post('/book/update/success', qrs.bookUpdate, qrs.bookShow4)
+
+
+ //member routing
+ app.get('/member/insert', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/member/memberinsert.html'));
+});
+app.get('/member/delete', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/member/memberdelete.html'));
+});
+app.get('/member/update', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/member/memberupdate.html'));
+});
+app.get('/member', qrs.memberShow1)
+app.post('/member/insert/success', qrs.memberInsert,qrs.memberShow2)
+app.post('/member/delete/success', qrs.memberDelete,qrs.memberShow3)
+app.post('/member/update/success', qrs.memberUpdate, qrs.memberShow4)
+
+
 
 
 

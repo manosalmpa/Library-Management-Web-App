@@ -23,10 +23,14 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"password",
+  password:"784512963",
   host    :"localhost",
   port    :3300,
+<<<<<<< HEAD
   database:"library5"
+=======
+  database:"library"
+>>>>>>> 177f3cdcdad1a8cd05ba554ba303e459057d41fd
 })
 
 client.connect()
@@ -67,7 +71,7 @@ fs.readFile(path.join(__dirname + '/public/book/book.html'), 'utf8', function re
   })
 });
 }
-// Query for Inserting a new author into the db
+// Query for Inserting a new book into the db
 const bookInsert =(req, res, next) => {
   var text = 'INSERT INTO book(isbn, title, pubyear, numpages, pubname) VALUES($1, $2, $3, $4, $5)'
   var isbn = req.body.b1
@@ -195,7 +199,7 @@ const bookShow4 = (req, res,next)=>{
   });
 }
 // queries for book table END HERE
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 // queries for author table START HERE
 // query for showing author entries in first page /authors
 const SelectAuthor1 = (cb) => { 
@@ -353,6 +357,172 @@ const authorShow4 = (req, res,next)=>{
   });
 }
 // queries for author table END HERE
+//////////////////////////////////////////////
+// queries for member table START HERE
+// query for showing member entries in first page /member
+const SelectMember1 = (cb) => { 
+  client.query('SELECT * FROM member ORDER BY memberid ASC', (error, res,cols) => {
+    if (error) {
+      throw error
+    }
+    console.log('query')
+    var tableme1 ='';
+    for(var i=0; i<res.rowCount; i++){
+      tableme1 += '<tr><td>' + res.rows[i].memberid +'</td><td>'+ res.rows[i].mfirst +'</td><td>'+ res.rows[i].mlast +'</td><td>'+ res.rows[i].street +'</td><td>' + res.rows[i].snumber +'</td><td>' + res.rows[i].postalcode +'</td><td>' + res.rows[i].mbirthdate +'</td></tr>';
+    }
+    tableme1 ='<table border="1"><tr><th> Member ID </th><th> First Name </th><th> Last Name </th><th> Street </th><th> Str Number </th><th> Postal Code </th><th> Date of Birth </th></tr>'+ tableme1 +'</table>';
+    return cb(tableme1);   
+  })
+}
+const memberShow1 = (req, res,next)=>{
+  var me1;
+fs.readFile(path.join(__dirname + '/public/member/member.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  me1 = data;
+  SelectMember1(resql=>{
+    me1 = me1.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(me1, 'utf-8');
+    res.end();
+  })
+});
+}
+// Query for Inserting a new member into the db
+const memberInsert =(req, res, next) => {
+  var text = 'INSERT INTO member(mfirst, mlast, street, snumber, postalcode, mbirthdate) VALUES($1, $2, $3, $4, $5,$6)'
+  var mfirst = req.body.m1
+  var mlast = req.body.m2
+  var street = req.body.m3
+  var snumber  = req.body.m4
+  var postalcode = req.body.m5
+  var mbirthdate = req.body.m6
+  var values = [mfirst, mlast, street, snumber, postalcode, mbirthdate]
+  console.log(values)
+  client.query(text, values, (err, res, next) => {
+    if (err) {
+      console.log(err.stack)
+    } else {
+    }
+    console.log('Inserted successfully!')
+  })
+  next()
+}
+// Query for showing new insert after successful insert follows with next()
+const SelectMember2 = (cb) => { 
+  client.query('SELECT * FROM member WHERE mfirst = ($1) AND mlast = ($2) ',
+    values , (error, res,cols) => {
+      if (error) {
+        throw error
+      }
+    var tableme2 ='';
+    for(var i=0; i<res.rowCount; i++){
+      tableme2 += '<tr><td>' + res.rows[i].memberid +'</td><td>'+ res.rows[i].mfirst +'</td><td>'+ res.rows[i].mlast +'</td><td>'+ res.rows[i].street +'</td><td>' + res.rows[i].snumber +'</td><td>' + res.rows[i].postalcode +'</td><td>' + res.rows[i].mbirthdate +'</td></tr>';
+    }
+    tableme2 ='<table border="1"><tr><th> Member ID </th><th> First Name </th><th> Last Name </th><th> Street </th><th> Str Number </th><th> Postal Code </th><th> Date of Birth </th></tr>'+ tableme2 +'</table>';
+    return cb(tableme2);  
+    })
+}
+const memberShow2 = (req, res,next)=>{
+  var mfirst = req.body.m1
+  var mlast = req.body.m2
+  values = [mfirst,mlast]
+  var me2
+  fs.readFile(path.join(__dirname + '/public/member/memberinsertsuccess.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  me2 = data;
+  SelectMember2(resql=>{
+    me2 = me2.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(me2, 'utf-8');
+    res.end();
+  })
+});
+}
+// Query for deleting member
+const memberDelete = (req, res, next) => {
+  var text = 'DELETE FROM  member WHERE memberid = ($1)'
+  var deleteMID= req.body.m7
+  var values = [deleteMID]
+  client.query(text, values, (err, res, next) => {
+    if (err) {
+      console.log(err.stack)
+    } else {
+    }
+    console.log('Deleted successfully!')
+  })
+  next()
+}
+const memberShow3 = (req, res,next)=>{
+  var me3
+  fs.readFile(path.join(__dirname + '/public/member/memberdeletesuccess.html'),
+ 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  me3 = data;
+  res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(me3, 'utf-8');
+    res.end();
+  });
+}
+// Query for updating author
+const memberUpdate =(req, res, next) => {
+  var text = 'UPDATE member SET mfirst = ($2) , mlast = ($3), street = ($4), snumber = ($5), postalcode = ($6), mbirthdate = ($7) WHERE memberid = ($1)'
+  var memberid = req.body.m8
+  var mfirst = req.body.m9
+  var mlast = req.body.m10
+  var street = req.body.m11
+  var snumber  = req.body.m12
+  var postalcode = req.body.m13
+  var mbirthdate = req.body.m14
+  var values = [memberid, mfirst, mlast, street, snumber, postalcode, mbirthdate]
+  client.query(text, values, (err, res, next) => {
+    if (err) {
+      console.log(err.stack)
+    } else {
+    }
+    console.log('Updated successfully!')
+  })
+  next()
+}
+const SelectMember4 = (cb) => { 
+  client.query('SELECT * FROM member WHERE mfirst = ($1) AND mlast = ($2) ',
+    values , (error, res,cols) => {
+      if (error) {
+        throw error
+      }
+    var tableme4 ='';
+    for(var i=0; i<res.rowCount; i++){
+      tableme4 += '<tr><td>' + res.rows[i].memberid +'</td><td>'+ res.rows[i].mfirst +'</td><td>'+ res.rows[i].mlast +'</td><td>'+ res.rows[i].street +'</td><td>' + res.rows[i].snumber +'</td><td>' + res.rows[i].postalcode +'</td><td>' + res.rows[i].mbirthdate +'</td></tr>';
+    }
+    tableme4 ='<table border="1"><tr><th> Member ID </th><th> First Name </th><th> Last Name </th><th> Street </th><th> Str Number </th><th> Postal Code </th><th> Date of Birth </th></tr>'+ tableme4 +'</table>';
+    return cb(tableme4);  
+    })
+}
+const memberShow4 = (req, res,next)=>{
+  var mfirst = req.body.m9
+  var mlast = req.body.m10
+  values = [mfirst,mlast]
+  var me4
+  fs.readFile(path.join(__dirname + '/public/member/memberupdatesuccess.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  me4 = data;
+  SelectMember4(resql=>{
+    me4 = me4.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(me4, 'utf-8');
+    res.end();
+  })
+  });
+}
+// queries for member table END HERE
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
   module.exports = {
@@ -371,4 +541,12 @@ const authorShow4 = (req, res,next)=>{
     authorShow3,
     authorUpdate,
     authorShow4,
+
+    memberShow1,
+    memberInsert,
+    memberShow2,
+    memberDelete,
+    memberShow3,
+    memberUpdate,
+    memberShow4,
 }
