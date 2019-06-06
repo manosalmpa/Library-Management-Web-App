@@ -211,7 +211,41 @@ fs.readFile(path.join(__dirname + '/public/qrs/memberpostal.html'), 'utf8', func
   })
 });
 }
-
+// all books with their categories
+const bookCat =(cb) => {
+  var text = ' SELECT book.isbn, book.title, '
+  text = text + '  book.numpages, belongs_to.categoryname '
+  text = text + ' FROM book FULL JOIN '
+  text = text + " belongs_to ON book.isbn = belongs_to.isbn "
+  text = text + " ORDER BY book.isbn "
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablebc ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablebc += '<tr><td>' + res.rows[i].isbn +'</td><td>' + res.rows[i].title +'</td><td>' + res.rows[i].numpages +'</td><td>' + res.rows[i].categoryname +'</td></tr>';
+  }
+  tablebc ='<table border="1"><tr><th> ISBN </th><th> Title </th><th> Number of pages </th><th> Category name </th></tr>'+ tablebc +'</table>';
+  return cb(tablebc);   
+})
+}
+const bookCatShow = (req, res,next)=>{
+  var bc;
+fs.readFile(path.join(__dirname + '/public/qrs/bookcat.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  bc = data;
+  bookCat(resql=>{
+    bc = bc.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(bc, 'utf-8');
+    res.end();
+  })
+});
+}
 
 
 
@@ -707,6 +741,7 @@ const memberShow4 = (req, res,next)=>{
     bookPublisherShow2, 
     memberSortShow,
     memberPostalShow, 
+    bookCatShow,
 
     bookShow1,
     bookInsert,
