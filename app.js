@@ -72,6 +72,24 @@ app.post('/book/delete/success', qrs.bookDelete,qrs.bookShow3)
 app.post('/book/update/success', qrs.bookUpdate, qrs.bookShow4)
 
 
+ //member routing
+ app.get('/member/insert', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/member/memberinsert.html'));
+});
+app.get('/member/delete', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/member/memberdelete.html'));
+});
+app.get('/member/update', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/member/memberupdate.html'));
+});
+app.get('/member', qrs.memberShow1)
+app.post('/member/insert/success', qrs.memberInsert,qrs.memberShow2)
+app.post('/member/delete/success', qrs.memberDelete,qrs.memberShow3)
+app.post('/member/update/success', qrs.memberUpdate, qrs.memberShow4)
+
+
+
+
 
 
 

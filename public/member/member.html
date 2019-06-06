@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+ <html>
+    <head>
+        <title> Members </title>
+    </head>
+    <body>
+       <h2> What do you want to do ?</h2>
+    </body>
+<form action="/" method="GET">
+    <button> Go back </button>
+</form>
+<form action="/member/insert" method="GET">
+    <button> Insert a new book </button>
+</form>
+<form action="/member/update" method="GET">
+    <button> Update an existing member </button>
+</form>
+<form action="/member/delete" method="GET">
+    <button> Delete an existing member </button>
+</form>
+<h1> Members </h1>
+{${table}}
+</html>
