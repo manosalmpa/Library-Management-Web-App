@@ -109,12 +109,143 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher.html'), 'utf8', fun
   })
 });
 }
-
-
-
-
-
-
+//showing book per publisher when books/publisher > 2
+const bookPublisher2 =(cb) => {
+  var text = ' SELECT publisher.pubname, COUNT(book.isbn) '
+  text = text + ' FROM publisher FULL JOIN book '
+  text = text + ' ON publisher.pubname = book.pubname '
+  text = text + ' WHERE publisher.pubname IS NOT NULL '
+  text = text + ' GROUP BY publisher.pubname HAVING COUNT(book.isbn)>2 '
+  console.log(text)
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablebp2 ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablebp2 += '<tr><td>' + res.rows[i].pubname +'</td><td>' + res.rows[i].count +'</td></tr>';
+  }
+  tablebp2 ='<table border="1"><tr><th> Publisher </th><th> Number of books </th></tr>'+ tablebp2 +'</table>';
+  return cb(tablebp2);   
+})
+}
+const bookPublisherShow2 = (req, res,next)=>{
+  var bp2;
+fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher2.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  bp2 = data;
+  bookPublisher2(resql=>{
+    bp2 = bp2.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(bp2, 'utf-8');
+    res.end();
+  })
+});
+}
+// Show members order by Last name
+const memberSort =(cb) => {
+  var text = ' SELECT member.mfirst,member.mlast,member.memberid '
+  text = text + ' FROM member ORDER BY member.mlast '
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablems ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablems += '<tr><td>' + res.rows[i].mfirst +'</td><td>' + res.rows[i].mlast +'</td><td>' + res.rows[i].memberid +'</td></tr>';
+  }
+  tablems ='<table border="1"><tr><th> First Name </th><th> Last Name </th><th> Member ID </th></tr>'+ tablems +'</table>';
+  return cb(tablems);   
+})
+}
+const memberSortShow = (req, res,next)=>{
+  var ms;
+fs.readFile(path.join(__dirname + '/public/qrs/membersort.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  ms = data;
+  memberSort(resql=>{
+    ms = ms.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(ms, 'utf-8');
+    res.end();
+  })
+});
+}
+// show members with mobile phone (aggregate)
+const memberPostal =(cb) => {
+  var text = ' SELECT member.memberid, member.mfirst, '
+  text = text + '  member.mlast, member.postalcode '
+  text = text + ' FROM member WHERE CAST '
+  text = text + " (member.postalcode as TEXT) LIKE '157%' "
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablemp ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablemp += '<tr><td>' + res.rows[i].memberid +'</td><td>' + res.rows[i].mfirst +'</td><td>' + res.rows[i].mlast +'</td><td>' + res.rows[i].postalcode +'</td></tr>';
+  }
+  tablemp ='<table border="1"><tr><th> Member ID </th><th> First Name </th><th> Last Name </th><th> Postal Code </th></tr>'+ tablemp +'</table>';
+  return cb(tablemp);   
+})
+}
+const memberPostalShow = (req, res,next)=>{
+  var mp;
+fs.readFile(path.join(__dirname + '/public/qrs/memberpostal.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  mp = data;
+  memberPostal(resql=>{
+    mp = mp.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(mp, 'utf-8');
+    res.end();
+  })
+});
+}
+// all books with their categories
+const bookCat =(cb) => {
+  var text = ' SELECT book.isbn, book.title, '
+  text = text + '  book.numpages, belongs_to.categoryname '
+  text = text + ' FROM book FULL JOIN '
+  text = text + " belongs_to ON book.isbn = belongs_to.isbn "
+  text = text + " ORDER BY book.isbn "
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablebc ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablebc += '<tr><td>' + res.rows[i].isbn +'</td><td>' + res.rows[i].title +'</td><td>' + res.rows[i].numpages +'</td><td>' + res.rows[i].categoryname +'</td></tr>';
+  }
+  tablebc ='<table border="1"><tr><th> ISBN </th><th> Title </th><th> Number of pages </th><th> Category name </th></tr>'+ tablebc +'</table>';
+  return cb(tablebc);   
+})
+}
+const bookCatShow = (req, res,next)=>{
+  var bc;
+fs.readFile(path.join(__dirname + '/public/qrs/bookcat.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  bc = data;
+  bookCat(resql=>{
+    bc = bc.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(bc, 'utf-8');
+    res.end();
+  })
+});
+}
 
 
 
@@ -606,7 +737,11 @@ const memberShow4 = (req, res,next)=>{
 
   module.exports = {
     bookAuthorShow,
-    bookPublisherShow, 
+    bookPublisherShow,
+    bookPublisherShow2, 
+    memberSortShow,
+    memberPostalShow, 
+    bookCatShow,
 
     bookShow1,
     bookInsert,
