@@ -39,13 +39,13 @@ SELECT member.mfirst,member.mlast,member.memberid
 FROM member
 ORDER BY member.mlast;
 
---SHOW MEMBERS WITH MOBILE PHONE(AGGREGATE)
+--SHOW MEMBERS WITH POSTAL CODE AT ZOGRAFOU(AGGREGATE)
 SELECT member.memberid,
        member.mfirst,
        member.mlast,
-       member.snumber
+       member.postalcode
 FROM member
-WHERE CAST(member.snumber as TEXT) LIKE '69%';
+WHERE CAST(member.postalcode as TEXT) LIKE '157%';
 
 --ALL BOOKS WITH THEIR CATEGORIES
 SELECT 
