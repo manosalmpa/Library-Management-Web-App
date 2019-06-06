@@ -26,7 +26,7 @@ var client = new Client({
   password:"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library5"
+  database:"library"
 })
 
 client.connect()
@@ -36,6 +36,89 @@ client.connect()
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: false}))
 
+//showing book-author query
+const bookAuthor =(cb) => {
+  var text = 'SELECT book.title, sub.afirst, sub.alast, sub.isbn FROM ';
+  text = text + '(SELECT author.authid, author.afirst, author.alast, written_by.isbn '
+  text = text + ' FROM author FULL JOIN written_by ON author.authid = written_by.authid'
+  text = text + ' WHERE written_by.isbn IS NOT NULL) AS sub FULL JOIN book';
+  text = text + ' ON book.isbn = sub.isbn;';
+  console.log(text)
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  console.log('query')
+  var tableba ='';
+  for(var i=0; i<res.rowCount; i++){
+    tableba += '<tr><td>' + res.rows[i].title +'</td><td>' + res.rows[i].afirst +'</td><td>' + res.rows[i].alast +'</td><td>' + res.rows[i].isbn +'</td></tr>';
+  }
+  tableba ='<table border="1"><tr><th> Book title </th><th> Author first name </th><th> Author last name</th><th> ISBN </th></tr>'+ tableba +'</table>';
+  return cb(tableba);   
+})
+}
+const bookAuthorShow = (req, res,next)=>{
+  var ba;
+fs.readFile(path.join(__dirname + '/public/qrs/bookauthor.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  ba = data;
+  bookAuthor(resql=>{
+    ba = ba.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(ba, 'utf-8');
+    res.end();
+  })
+});
+}
+//showing book per publisher
+const bookPublisher =(cb) => {
+  var text = ' SELECT publisher.pubname, COUNT(book.isbn) '
+  text = text + ' FROM publisher FULL JOIN book '
+  text = text + ' ON publisher.pubname = book.pubname WHERE '
+  text = text + ' publisher.pubname IS NOT NULL '
+  text = text + ' GROUP BY publisher.pubname '
+  console.log(text)
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablebp ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablebp += '<tr><td>' + res.rows[i].pubname +'</td><td>' + res.rows[i].count +'</td></tr>';
+  }
+  tablebp ='<table border="1"><tr><th> Publisher </th><th> Number of books </th></tr>'+ tablebp +'</table>';
+  return cb(tablebp);   
+})
+}
+const bookPublisherShow = (req, res,next)=>{
+  var bp;
+fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  bp = data;
+  bookPublisher(resql=>{
+    bp = bp.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(bp, 'utf-8');
+    res.end();
+  })
+});
+}
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////
 // queries for book table START HERE
 // query for showing book entries in first page /book
 const SelectBook1 = (cb) => { 
@@ -465,7 +548,7 @@ const memberShow3 = (req, res,next)=>{
     res.end();
   });
 }
-// Query for updating author
+// Query for updating member
 const memberUpdate =(req, res, next) => {
   var text = 'UPDATE member SET mfirst = ($2) , mlast = ($3), street = ($4), snumber = ($5), postalcode = ($6), mbirthdate = ($7) WHERE memberid = ($1)'
   var memberid = req.body.m8
@@ -522,6 +605,9 @@ const memberShow4 = (req, res,next)=>{
 
 
   module.exports = {
+    bookAuthorShow,
+    bookPublisherShow, 
+
     bookShow1,
     bookInsert,
     bookShow2,
