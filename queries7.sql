@@ -1,3 +1,4 @@
+-- Indicative file for 7 queries executed in the home page as famous searches
 -- 1 COMPLETE LIST OF BOOKS AND THEIR AUTHORS (NESTED,JOIN)
 SELECT
     book.title,
