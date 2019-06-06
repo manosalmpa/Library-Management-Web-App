@@ -465,7 +465,7 @@ const memberShow3 = (req, res,next)=>{
     res.end();
   });
 }
-// Query for updating author
+// Query for updating member
 const memberUpdate =(req, res, next) => {
   var text = 'UPDATE member SET mfirst = ($2) , mlast = ($3), street = ($4), snumber = ($5), postalcode = ($6), mbirthdate = ($7) WHERE memberid = ($1)'
   var memberid = req.body.m8
