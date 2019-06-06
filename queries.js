@@ -26,7 +26,7 @@ var client = new Client({
   password:"password",
   host    :"localhost",
   port    :3300,
-  database:"library2"
+  database:"library5"
 })
 
 client.connect()
