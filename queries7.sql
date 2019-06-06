@@ -1,4 +1,4 @@
---COMPLETE LIST OF BOOKS AND THEIR AUTHORS (NESTED,JOIN)
+-- 1 COMPLETE LIST OF BOOKS AND THEIR AUTHORS (NESTED,JOIN)
 SELECT
     book.title,
     sub.afirst,
@@ -16,8 +16,7 @@ FROM (
     WHERE written_by.isbn IS NOT NULL) AS sub
 FULL JOIN book
 ON book.isbn = sub.isbn;
-
---BOOKS PER PUBLISHER (JOIN,AGGREGATE,GROUP BY)
+-- 2 BOOKS PER PUBLISHER (JOIN,AGGREGATE,GROUP BY)
 SELECT publisher.pubname,
        COUNT(book.isbn)
 FROM publisher
@@ -25,7 +24,7 @@ FULL JOIN book ON publisher.pubname = book.pubname
 WHERE publisher.pubname IS NOT NULL
 GROUP BY publisher.pubname;
 
---BOOKS PER PUBLISHED >2 (GROUP BY ME HAVING)
+-- 3 BOOKS PER PUBLISHED >2 (GROUP BY, AGGREGATE)
 SELECT publisher.pubname,
        COUNT(book.isbn) 
 FROM publisher
@@ -33,21 +32,18 @@ FULL JOIN book ON publisher.pubname = book.pubname
 WHERE publisher.pubname IS NOT NULL
 GROUP BY publisher.pubname
 HAVING COUNT(book.isbn)>2;
-
---ORDER BY mlast(ORDER BY)
+-- 4 ORDER BY mlast(ORDER BY)
 SELECT member.mfirst,member.mlast,member.memberid
 FROM member
 ORDER BY member.mlast;
-
---SHOW MEMBERS WITH POSTAL CODE AT ZOGRAFOU(AGGREGATE)
+--5 SHOW MEMBERS WITH POSTAL CODE AT ZOGRAFOU(LIKE) 
 SELECT member.memberid,
        member.mfirst,
        member.mlast,
        member.postalcode
 FROM member
 WHERE CAST(member.postalcode as TEXT) LIKE '157%';
-
---ALL BOOKS WITH THEIR CATEGORIES
+-- 6 ALL BOOKS WITH THEIR CATEGORIES (JOIN, ORDER BY)
 SELECT 
     book.isbn,
     book.title,
