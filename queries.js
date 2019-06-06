@@ -111,11 +111,11 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher.html'), 'utf8', fun
 }
 //showing book per publisher when books/publisher > 2
 const bookPublisher2 =(cb) => {
-  var text = ' SELECT publisher.pubname, COUNT(book.isbn) AS C '
+  var text = ' SELECT publisher.pubname, COUNT(book.isbn) '
   text = text + ' FROM publisher FULL JOIN book '
   text = text + ' ON publisher.pubname = book.pubname '
   text = text + ' WHERE publisher.pubname IS NOT NULL '
-  text = text + ' HAVING C>2 GROUP BY publisher.pubname '
+  text = text + ' GROUP BY publisher.pubname HAVING COUNT(book.isbn)>2 '
   console.log(text)
   client.query(text, (error, res,cols) => {
     if (error) {
