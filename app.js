@@ -45,6 +45,7 @@ app.get('/bookauthor', qrs.bookAuthorShow)
 app.get('/bookpublisher', qrs.bookPublisherShow)
 app.get('/bookpublisher2', qrs.bookPublisherShow2)
 app.get('/membersort', qrs.memberSortShow)
+app.get('/memberpostal', qrs.memberPostalShow)
 
 
  //authors routing

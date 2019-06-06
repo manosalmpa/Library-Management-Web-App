@@ -145,7 +145,6 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookpublisher2.html'), 'utf8', fu
   })
 });
 }
-
 // Show members order by Last name
 const memberSort =(cb) => {
   var text = ' SELECT member.mfirst,member.mlast,member.memberid '
@@ -178,7 +177,40 @@ fs.readFile(path.join(__dirname + '/public/qrs/membersort.html'), 'utf8', functi
   })
 });
 }
-
+// show members with mobile phone (aggregate)
+const memberPostal =(cb) => {
+  var text = ' SELECT member.memberid, member.mfirst, '
+  text = text + '  member.mlast, member.postalcode '
+  text = text + ' FROM member WHERE CAST '
+  text = text + " (member.postalcode as TEXT) LIKE '157%' "
+  client.query(text, (error, res,cols) => {
+    if (error) {
+      console.log(error)
+    throw error
+  }
+  var tablemp ='';
+  for(var i=0; i<res.rowCount; i++){
+    tablemp += '<tr><td>' + res.rows[i].memberid +'</td><td>' + res.rows[i].mfirst +'</td><td>' + res.rows[i].mlast +'</td><td>' + res.rows[i].postalcode +'</td></tr>';
+  }
+  tablemp ='<table border="1"><tr><th> Member ID </th><th> First Name </th><th> Last Name </th><th> Postal Code </th></tr>'+ tablemp +'</table>';
+  return cb(tablemp);   
+})
+}
+const memberPostalShow = (req, res,next)=>{
+  var mp;
+fs.readFile(path.join(__dirname + '/public/qrs/memberpostal.html'), 'utf8', function read(err, data) {
+  if (err) {
+      throw err;
+  } 
+  mp = data;
+  memberPostal(resql=>{
+    mp = mp.replace('{${table}}', resql);
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+    res.write(mp, 'utf-8');
+    res.end();
+  })
+});
+}
 
 
 
@@ -673,7 +705,8 @@ const memberShow4 = (req, res,next)=>{
     bookAuthorShow,
     bookPublisherShow,
     bookPublisherShow2, 
-    memberSortShow, 
+    memberSortShow,
+    memberPostalShow, 
 
     bookShow1,
     bookInsert,
