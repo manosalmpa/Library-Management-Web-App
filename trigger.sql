@@ -1,3 +1,4 @@
+--auto create reminder from borrowing
 CREATE OR REPLACE FUNCTION create_reminder() 
 RETURNS TRIGGER
 LANGUAGE plpgsql
