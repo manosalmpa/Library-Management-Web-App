@@ -12,11 +12,6 @@ VALUES  ('1948576910', 'Game of Thrones', '520'),
         ('1574930452', 'False Step','421'),
         ('1595003214', 'Along the Broken Bay','776'),
         ('1743549801', 'Bad Therapist', '541');
---INSERT INTO book (ISBN, Title , numpages )
---VALUES  ('1948576910', 'Game of Thrones', '520'),
-  --      ('1574930452', 'False Step','421'),
-   --     ('1595003214', 'Along the Broken Bay','776'),
-    --    ('1743549801', 'Bad Therapist', '541');
 
 INSERT INTO publisher
     (pubname)
@@ -39,10 +34,14 @@ VALUES
     ('James', 'Patterson');
 
 INSERT INTO category
+    (categoryname)
 VALUES
-    ('fiction','NULL'),
+    ('fiction'),
+    ('culture');
+    
+INSERT INTO category
+VALUES
     ('sci-fi','fiction'),
-    ('culture','NULL'),
     ('romance','culture'),
     ('history','culture');
 
@@ -58,5 +57,40 @@ VALUES
     ('1595003214', '1'),
     ('1743549801','1');
 
+INSERT INTO employee
+    ( efirst, elast, salary)
+VALUES
+    ('giorgos','darikas','250'),
+    ('danny','green','100');
 
---C:/Users/Vagelis/Documents/dbs/app1/ins.sql link for inserting
+INSERT INTO permanent_employee
+    (empid)
+VALUES
+    ('1');
+
+INSERT INTO temporary_employee
+    (empid)
+VALUES
+    ('2');
+
+INSERT INTO belongs_to
+    (isbn, categoryname)
+VALUES
+    ('1948576910','fiction'),
+    ('1948576910','culture'),
+    ('1948576910','history'),
+    ('1574930452','fiction'),
+    ('1574930452','sci-fi'),
+    ('1595003214','fiction'),
+    ('1743549801','culture'),
+    ('1743549801','romance');
+
+INSERT INTO written_by
+    (isbn, authid)
+VALUES
+    ('1948576910', '3'),
+    ('1574930452', '6'),
+    ('1595003214', '1'),
+    ('1743549801', '4');
+
+

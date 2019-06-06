@@ -61,7 +61,7 @@ CREATE TABLE copies(
 );
 DROP TABLE IF EXISTS employee CASCADE ;
 CREATE TABLE employee(
-    empid INT NOT NULL UNIQUE,
+    empid SERIAL,
     efirst TEXT NOT NULL,
     elast TEXT NOT NULL,
     salary INT,
@@ -69,7 +69,7 @@ CREATE TABLE employee(
 );
 DROP TABLE IF EXISTS permanent_employee ;
 CREATE TABLE permanent_employee(
-    empid INT NOT NULL UNIQUE ,
+    empid INT ,
     hiringdate DATE,
     PRIMARY KEY (empid),
     FOREIGN KEY (empid) REFERENCES employee(empid)
@@ -78,7 +78,7 @@ CREATE TABLE permanent_employee(
 );
 DROP TABLE IF EXISTS temporary_employee ;
 CREATE TABLE temporary_employee(
-    empid INT NOT NULL UNIQUE ,
+    empid INT ,
     contractnr INT,
     PRIMARY KEY (empid),
     FOREIGN KEY (empid) REFERENCES employee(empid)
