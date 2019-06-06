@@ -70,7 +70,7 @@ CREATE TABLE employee(
 );
 DROP TABLE IF EXISTS permanent_employee ;
 CREATE TABLE permanent_employee(
-    empid INT ,
+    empid SERIAL,
     hiringdate DATE,
     PRIMARY KEY (empid),
     FOREIGN KEY (empid) REFERENCES employee(empid)

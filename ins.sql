@@ -85,13 +85,10 @@ INSERT INTO belongs_to
     (isbn, categoryname)
 VALUES
     ('1948576910','fiction'),
-    ('1948576910','culture'),
     ('1948576910','history'),
-    ('1574930452','fiction'),
     ('1574930452','sci-fi'),
     ('1595003214','fiction'),
     ('1743549801','culture'),
-    ('1743549801','romance'),
     ('1309458796','sci-fi'),
     ('1134589703','sci-fi'),
     ('1456907891','romance');

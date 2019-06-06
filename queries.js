@@ -23,10 +23,10 @@ app.use('/users', usersRouter);
 //postgresql database setup
 var client = new Client({
   user    :"postgres",
-  password:"784512963",
+  password:"password",//"784512963",
   host    :"localhost",
   port    :3300,
-  database:"library"
+  database:"library1"
 })
 
 client.connect()
@@ -249,7 +249,7 @@ fs.readFile(path.join(__dirname + '/public/qrs/bookcat.html'), 'utf8', function 
 // 7 show copies per book
 const bookCopy =(cb) => {
   var text = '  SELECT copies.isbn, COUNT(copies.copynr) '
-  text = text + '   FROM copies GROUP BY copies.isbn '
+  text = text + ' FROM copies GROUP BY copies.isbn '
   console.log(text)
   client.query(text, (error, res,cols) => {
     if (error) {
@@ -258,7 +258,7 @@ const bookCopy =(cb) => {
   }
   var tablebc ='';
   for(var i=0; i<res.rowCount; i++){
-    tablebc += '<tr><td>' + res.rows[i].isbn +'</td><td>' + res.rows[i].copynr +'</td></tr>';
+    tablebc += '<tr><td>' + res.rows[i].isbn +'</td><td>' + res.rows[i].count +'</td></tr>';
   }
   tablebc ='<table border="1"><tr><th> ISBN  </th><th> Number of copies </th></tr>'+ tablebc +'</table>';
   return cb(tablebc);   
