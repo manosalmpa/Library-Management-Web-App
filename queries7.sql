@@ -34,12 +34,12 @@ WHERE publisher.pubname IS NOT NULL
 GROUP BY publisher.pubname
 HAVING c>5;
 
---ORDER BY mlast
+--ORDER BY mlast(ORDER BY)
 SELECT member.mfirst,member.mlast,member.memberid
 FROM member
 ORDER BY member.mlast;
 
---SHOW MEMBERS WITH MOBILE PHONE
+--SHOW MEMBERS WITH MOBILE PHONE(AGGREGATE)
 SELECT member.memberid,
        member.mfirst,
        member.mlast,
